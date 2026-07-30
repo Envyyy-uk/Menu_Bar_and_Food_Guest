@@ -582,6 +582,120 @@ const I18N = {
     ru: 'Все вина, игристые и сидр содержат сульфиты.'
   },
 
+  /* ----------------------------------------------------- адмін-панель --- */
+  'adm.sub': {
+    uk: 'Адмін-панель · години та наявність', en: 'Admin panel · hours and availability',
+    es: 'Panel de administración · horarios y disponibilidad',
+    it: 'Pannello di amministrazione · orari e disponibilità',
+    de: 'Admin-Bereich · Zeiten und Verfügbarkeit',
+    ru: 'Админ-панель · часы и наличие'
+  },
+  'adm.back': {
+    uk: '← До меню', en: '← Back to the menu', es: '← Volver a la carta',
+    it: '← Torna al menu', de: '← Zurück zum Menü', ru: '← К меню'
+  },
+  'adm.tab.items':     { uk: 'Позиції', en: 'Items', es: 'Platos', it: 'Voci', de: 'Positionen', ru: 'Позиции' },
+  'adm.tab.sections':  { uk: 'Розділи', en: 'Sections', es: 'Secciones', it: 'Sezioni', de: 'Abschnitte', ru: 'Разделы' },
+  'adm.tab.pages':     { uk: 'Сторінки', en: 'Pages', es: 'Páginas', it: 'Pagine', de: 'Seiten', ru: 'Страницы' },
+  'adm.tab.schedules': { uk: 'Розклади', en: 'Schedules', es: 'Horarios', it: 'Orari', de: 'Zeitpläne', ru: 'Расписания' },
+
+  'adm.search': {
+    uk: 'Пошук позиції…', en: 'Find an item…', es: 'Buscar un plato…',
+    it: 'Cerca una voce…', de: 'Position suchen…', ru: 'Поиск позиции…'
+  },
+  'adm.export':    { uk: 'Експортувати overrides.js', en: 'Export overrides.js', es: 'Exportar overrides.js', it: 'Esporta overrides.js', de: 'overrides.js exportieren', ru: 'Экспортировать overrides.js' },
+  'adm.publish':   { uk: 'Опублікувати на сервері', en: 'Publish to the server', es: 'Publicar en el servidor', it: 'Pubblica sul server', de: 'Auf dem Server veröffentlichen', ru: 'Опубликовать на сервере' },
+  'adm.published': { uk: 'Опубліковано ✓', en: 'Published ✓', es: 'Publicado ✓', it: 'Pubblicato ✓', de: 'Veröffentlicht ✓', ru: 'Опубликовано ✓' },
+  'adm.offline':   { uk: 'Сервер недоступний', en: 'Server unreachable', es: 'Servidor no disponible', it: 'Server non raggiungibile', de: 'Server nicht erreichbar', ru: 'Сервер недоступен' },
+  'adm.copy':      { uk: 'Скопіювати вміст', en: 'Copy the contents', es: 'Copiar el contenido', it: 'Copia il contenuto', de: 'Inhalt kopieren', ru: 'Скопировать содержимое' },
+  'adm.copied':    { uk: 'Скопійовано ✓', en: 'Copied ✓', es: 'Copiado ✓', it: 'Copiato ✓', de: 'Kopiert ✓', ru: 'Скопировано ✓' },
+  'adm.selected':  { uk: 'Виділено — Ctrl+C', en: 'Selected — press Ctrl+C', es: 'Seleccionado — Ctrl+C', it: 'Selezionato — Ctrl+C', de: 'Markiert — Strg+C', ru: 'Выделено — Ctrl+C' },
+  'adm.reset':     { uk: 'Скинути чернетку', en: 'Discard the draft', es: 'Descartar el borrador', it: 'Scarta la bozza', de: 'Entwurf verwerfen', ru: 'Сбросить черновик' },
+  'adm.confirmReset': {
+    uk: 'Скинути чернетку до того, що зараз лежить у overrides.js?',
+    en: 'Discard the draft and go back to what is in overrides.js?',
+    es: '¿Descartar el borrador y volver a lo que hay en overrides.js?',
+    it: 'Scartare la bozza e tornare a quanto contenuto in overrides.js?',
+    de: 'Entwurf verwerfen und zum Stand in overrides.js zurückkehren?',
+    ru: 'Сбросить черновик до того, что сейчас лежит в overrides.js?'
+  },
+
+  'adm.notice.summary': {
+    uk: 'Як зміни доходять до гостей · про захист сторінки',
+    en: 'How changes reach guests · about this page’s security',
+    es: 'Cómo llegan los cambios a los clientes · sobre la seguridad de esta página',
+    it: 'Come le modifiche arrivano agli ospiti · sulla sicurezza di questa pagina',
+    de: 'Wie Änderungen bei den Gästen ankommen · zur Sicherheit dieser Seite',
+    ru: 'Как изменения доходят до гостей · о защите страницы'
+  },
+  'adm.notice.how': {
+    uk: '<b>Панель не пише на сервер.</b> Усе, що ви тут міняєте, одразу діє <b>лише у вашому браузері</b> — зручно, щоб подивитися результат. Щоб зміни побачили гості, натисніть <b>Експортувати</b> (або <b>Скопіювати вміст</b>), покладіть це замість <code>assets/overrides.js</code> і запуште — за хвилину сайт оновиться в усіх. <b>Скинути</b> прибирає локальну чернетку.',
+    en: '<b>This panel does not write to a server.</b> Everything you change here applies <b>in your browser only</b> — handy for checking the result. To let guests see it, press <b>Export</b> (or <b>Copy the contents</b>), put that in place of <code>assets/overrides.js</code> and push — the site updates for everyone within a minute. <b>Discard</b> clears the local draft.',
+    es: '<b>Este panel no escribe en ningún servidor.</b> Todo lo que cambie aquí se aplica <b>solo en su navegador</b>, útil para ver el resultado. Para que lo vean los clientes, pulse <b>Exportar</b> (o <b>Copiar el contenido</b>), póngalo en lugar de <code>assets/overrides.js</code> y haga push: el sitio se actualiza para todos en un minuto. <b>Descartar</b> borra el borrador local.',
+    it: '<b>Questo pannello non scrive su un server.</b> Tutto ciò che modificate qui vale <b>solo nel vostro browser</b>: comodo per vedere il risultato. Perché lo vedano gli ospiti, premete <b>Esporta</b> (o <b>Copia il contenuto</b>), mettetelo al posto di <code>assets/overrides.js</code> e fate push: il sito si aggiorna per tutti in un minuto. <b>Scarta</b> cancella la bozza locale.',
+    de: '<b>Dieser Bereich schreibt auf keinen Server.</b> Alles, was Sie hier ändern, gilt <b>nur in Ihrem Browser</b> — praktisch zur Kontrolle. Damit Gäste es sehen, auf <b>Exportieren</b> (oder <b>Inhalt kopieren</b>) tippen, das Ergebnis anstelle von <code>assets/overrides.js</code> ablegen und pushen — die Seite aktualisiert sich binnen einer Minute für alle. <b>Verwerfen</b> löscht den lokalen Entwurf.',
+    ru: '<b>Панель не пишет на сервер.</b> Всё, что вы здесь меняете, действует <b>только в вашем браузере</b> — удобно, чтобы посмотреть результат. Чтобы изменения увидели гости, нажмите <b>Экспортировать</b> (или <b>Скопировать содержимое</b>), положите это вместо <code>assets/overrides.js</code> и запушьте — через минуту сайт обновится у всех. <b>Сбросить</b> убирает локальный черновик.'
+  },
+  'adm.notice.security': {
+    uk: '<b>Сторінка нічим не захищена.</b> Вона просто не має посилань з меню й закрита від пошуковиків. Хто знає адресу — зайде. Без сервера інакше не буде.',
+    en: '<b>This page has no protection.</b> It simply carries no link from the menu and is closed to search engines. Anyone who knows the address can open it. Without a server there is no other way.',
+    es: '<b>Esta página no está protegida.</b> Sencillamente no tiene enlaces desde la carta y está cerrada a los buscadores. Quien conozca la dirección entrará. Sin servidor no hay otra forma.',
+    it: '<b>Questa pagina non è protetta.</b> Semplicemente non ha collegamenti dal menu ed è chiusa ai motori di ricerca. Chi conosce l’indirizzo entra. Senza server non si può fare altrimenti.',
+    de: '<b>Diese Seite ist nicht geschützt.</b> Sie ist lediglich nicht aus dem Menü verlinkt und für Suchmaschinen gesperrt. Wer die Adresse kennt, kommt hinein. Ohne Server geht es nicht anders.',
+    ru: '<b>Страница ничем не защищена.</b> Она просто не имеет ссылок из меню и закрыта от поисковиков. Кто знает адрес — зайдёт. Без сервера иначе не будет.'
+  },
+  'adm.footer': {
+    uk: 'Зміни стають видимими для гостей лише після заміни overrides.js у репозиторії.',
+    en: 'Changes become visible to guests only once overrides.js is replaced in the repository.',
+    es: 'Los cambios solo son visibles para los clientes tras sustituir overrides.js en el repositorio.',
+    it: 'Le modifiche diventano visibili agli ospiti solo dopo aver sostituito overrides.js nel repository.',
+    de: 'Änderungen werden für Gäste erst sichtbar, wenn overrides.js im Repository ersetzt wurde.',
+    ru: 'Изменения становятся видимыми для гостей только после замены overrides.js в репозитории.'
+  },
+
+  'adm.state.auto': { uk: 'За розкладом', en: 'On schedule', es: 'Según horario', it: 'Su orario', de: 'Nach Zeitplan', ru: 'По расписанию' },
+  'adm.state.on':   { uk: 'Завжди', en: 'Always', es: 'Siempre', it: 'Sempre', de: 'Immer', ru: 'Всегда' },
+  'adm.state.off':  { uk: 'Немає', en: 'Off', es: 'Agotado', it: 'Esaurito', de: 'Aus', ru: 'Нет' },
+
+  'adm.mode.dim':   { uk: 'Приглушити', en: 'Dim', es: 'Atenuar', it: 'Attenua', de: 'Abblenden', ru: 'Приглушить' },
+  'adm.mode.hide':  { uk: 'Ховати', en: 'Hide', es: 'Ocultar', it: 'Nascondi', de: 'Ausblenden', ru: 'Скрывать' },
+  'adm.mode.title': {
+    uk: 'Як показувати, коли позиція закрита', en: 'How to show it while closed',
+    es: 'Cómo mostrarlo cuando está cerrado', it: 'Come mostrarlo quando è chiuso',
+    de: 'Wie es dargestellt wird, solange es geschlossen ist', ru: 'Как показывать, когда позиция закрыта'
+  },
+  'adm.noSchedule': {
+    uk: '— без розкладу —', en: '— no schedule —', es: '— sin horario —',
+    it: '— nessun orario —', de: '— kein Zeitplan —', ru: '— без расписания —'
+  },
+  'adm.status.open':     { uk: 'доступно', en: 'available', es: 'disponible', it: 'disponibile', de: 'verfügbar', ru: 'доступно' },
+  'adm.status.off':      { uk: 'немає', en: 'off', es: 'agotado', it: 'esaurito', de: 'aus', ru: 'нет' },
+  'adm.status.offhours': { uk: 'поза годинами', en: 'outside hours', es: 'fuera de horario', it: 'fuori orario', de: 'außerhalb der Zeiten', ru: 'вне часов' },
+
+  'adm.countOf':   { uk: 'із', en: 'of', es: 'de', it: 'di', de: 'von', ru: 'из' },
+  'adm.closedManually': {
+    uk: 'закрито вручну', en: 'closed by hand', es: 'cerrado a mano',
+    it: 'chiusi a mano', de: 'manuell geschlossen', ru: 'закрыто вручную'
+  },
+  'adm.setmenu':   { uk: 'Сет-меню', en: 'Set menu', es: 'Menú cerrado', it: 'Menu fisso', de: 'Set-Menü', ru: 'Сет-меню' },
+  'adm.builtIn':   { uk: 'вбудований', en: 'built in', es: 'incorporado', it: 'integrato', de: 'eingebaut', ru: 'встроенный' },
+  'adm.addRange':  { uk: '+ діапазон', en: '+ time range', es: '+ franja horaria', it: '+ fascia oraria', de: '+ Zeitfenster', ru: '+ диапазон' },
+  'adm.removeRange': { uk: 'Прибрати діапазон', en: 'Remove this range', es: 'Quitar esta franja', it: 'Rimuovi questa fascia', de: 'Zeitfenster entfernen', ru: 'Убрать диапазон' },
+  'adm.newSchedule': { uk: '+ створити розклад', en: '+ create a schedule', es: '+ crear un horario', it: '+ crea un orario', de: '+ Zeitplan anlegen', ru: '+ создать расписание' },
+  'adm.newSchedulePh': {
+    uk: 'назва нового розкладу, напр. breakfast', en: 'name of the new schedule, e.g. breakfast',
+    es: 'nombre del nuevo horario, p. ej. breakfast', it: 'nome del nuovo orario, es. breakfast',
+    de: 'Name des neuen Zeitplans, z. B. breakfast', ru: 'название нового расписания, напр. breakfast'
+  },
+  'adm.fileHeader': {
+    uk: 'Згенеровано адмін-панеллю. Замініть цим файлом assets/overrides.js і запуште, щоб зміни побачили гості.',
+    en: 'Generated by the admin panel. Replace assets/overrides.js with this file and push so guests see the change.',
+    es: 'Generado por el panel de administración. Sustituya assets/overrides.js por este archivo y haga push para que los clientes lo vean.',
+    it: 'Generato dal pannello di amministrazione. Sostituite assets/overrides.js con questo file e fate push perché gli ospiti lo vedano.',
+    de: 'Vom Admin-Bereich erzeugt. Ersetzen Sie assets/overrides.js durch diese Datei und pushen Sie, damit Gäste die Änderung sehen.',
+    ru: 'Сгенерировано админ-панелью. Замените этим файлом assets/overrides.js и запушьте, чтобы изменения увидели гости.'
+  },
+
   /* --------------------------------------------------------- sections --- */
   'sec.brunch':          { uk: 'Бранч', en: 'Brunch', es: 'Brunch', it: 'Brunch', de: 'Brunch', ru: 'Бранч' },
   'sec.starters':        { uk: 'Закуски', en: 'Starters', es: 'Entrantes', it: 'Antipasti', de: 'Vorspeisen', ru: 'Закуски' },

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Адмін-панель — Smith &amp; Wollensky</title>
+<title>Admin — Smith &amp; Wollensky</title>
 <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body class="admin">
@@ -13,10 +13,10 @@
   <div class="wrap">
     <a class="brand" href="index.html">
       <b>Smith &amp; Wollensky</b>
-      <span>Адмін-панель · години та наявність</span>
+      <span data-i18n="adm.sub"></span>
     </a>
     <nav class="nav">
-      <a href="index.html">← До меню</a>
+      <a href="index.html" data-i18n="adm.back"></a>
     </nav>
   </div>
 </header>
@@ -26,31 +26,26 @@
   <!-- керування нагорі: у залі його відкривають, щоб швидко щось закрити -->
   <div class="abar">
     <div class="atabs">
-      <button class="atab on" data-tab="items" type="button">Позиції</button>
-      <button class="atab" data-tab="sections" type="button">Розділи</button>
-      <button class="atab" data-tab="pages" type="button">Сторінки</button>
-      <button class="atab" data-tab="schedules" type="button">Розклади</button>
+      <button class="atab on" data-tab="items" type="button" data-i18n="adm.tab.items"></button>
+      <button class="atab" data-tab="sections" type="button" data-i18n="adm.tab.sections"></button>
+      <button class="atab" data-tab="pages" type="button" data-i18n="adm.tab.pages"></button>
+      <button class="atab" data-tab="schedules" type="button" data-i18n="adm.tab.schedules"></button>
     </div>
-    <input id="asearch" class="search" type="search" placeholder="Пошук позиції…">
+    <input id="asearch" class="search" type="search" data-i18n-ph="adm.search">
     <span class="aclock" id="clock"></span>
   </div>
 
   <div class="aactions">
-    <button id="export" class="filter-toggle" type="button">Експортувати overrides.js</button>
-    <button id="copy" class="filter-toggle" type="button">Скопіювати вміст</button>
-    <button id="reset" class="clear-btn" type="button">Скинути чернетку</button>
+    <button id="export" class="filter-toggle" type="button"></button>
+    <button id="copy" class="filter-toggle" type="button" data-i18n="adm.copy"></button>
+    <button id="reset" class="clear-btn" type="button" data-i18n="adm.reset"></button>
   </div>
   <textarea id="dump" class="adump" readonly style="display:none"></textarea>
 
   <details class="anote">
-    <summary>Як зміни доходять до гостей · про захист сторінки</summary>
-    <p><b>Панель не пише на сервер.</b> Усе, що ви тут міняєте, одразу діє
-      <b>лише у вашому браузері</b> — зручно, щоб подивитися результат. Щоб зміни
-      побачили гості, натисніть <b>Експортувати</b> (або <b>Скопіювати вміст</b>),
-      покладіть це замість <code>assets/overrides.js</code> і запуште — за хвилину
-      сайт оновиться в усіх. <b>Скинути</b> прибирає локальну чернетку.</p>
-    <p><b>Сторінка нічим не захищена.</b> Вона просто не має посилань з меню й
-      закрита від пошуковиків. Хто знає адресу — зайде. Без сервера інакше не буде.</p>
+    <summary data-i18n="adm.notice.summary"></summary>
+    <p data-i18n="adm.notice.how"></p>
+    <p data-i18n="adm.notice.security"></p>
   </details>
 
   <div id="panel"></div>
@@ -58,8 +53,8 @@
 
 <footer>
   <div class="wrap">
-    <span><a href="index.html">← До всіх меню</a></span>
-    <span>Зміни стають видимими для гостей лише після заміни overrides.js у репозиторії.</span>
+    <span><a href="index.html" data-i18n="footer.back"></a></span>
+    <span data-i18n="adm.footer"></span>
   </div>
 </footer>
 

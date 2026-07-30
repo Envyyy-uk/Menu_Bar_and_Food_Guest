@@ -14,7 +14,9 @@ const ael = (tag, cls, html) => {
 const aesc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 const PAGES = ['brunch', 'lunch', 'dinner', 'canapes', 'desserts', 'drinks', 'allergens'];
-const DAY_NAMES = ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
+let LANG = getLang();
+const dayNames = () => t('sched.days', LANG).split(',');
 
 let draft = { updated: '', schedules: {}, rules: {} };
 let filter = '';
@@ -42,22 +44,22 @@ function persist() {
 function everyItem() {
   return DISHES.concat(DRINKS).map(d => ({
     scope: 'dish', id: d.id, name: d.name,
-    sub: d.t ? (d.t.uk || d.t.en) : '',
-    group: t('sec.' + d.section, 'uk')
-  })).sort((a, b) => a.group.localeCompare(b.group, 'uk') || a.name.localeCompare(b.name));
+    sub: d.t ? (d.t[LANG] || d.t.en) : '',
+    group: t('sec.' + d.section, LANG)
+  })).sort((a, b) => a.group.localeCompare(b.group, LANG) || a.name.localeCompare(b.name));
 }
 
 function everySection() {
   const keys = new Set(DISHES.concat(DRINKS).map(d => d.section).filter(Boolean));
   WINE_ORDER.concat(DESSERT_WINE_ORDER).forEach(k => keys.add(k));
-  return [...keys].map(k => ({ scope: 'section', id: k, name: t('sec.' + k, 'uk'), sub: I18N['sec.' + k] ? I18N['sec.' + k].en : '' }))
-    .sort((a, b) => a.name.localeCompare(b.name, 'uk'));
+  return [...keys].map(k => ({ scope: 'section', id: k, name: t('sec.' + k, LANG), sub: I18N['sec.' + k] ? I18N['sec.' + k].en : '' }))
+    .sort((a, b) => a.name.localeCompare(b.name, LANG));
 }
 
 function everyPage() {
-  return PAGES.map(p => ({ scope: 'page', id: p, name: t('nav.' + p, 'uk'), sub: p + '.html' }))
+  return PAGES.map(p => ({ scope: 'page', id: p, name: t('nav.' + p, LANG), sub: p + '.html' }))
     .concat(['lunch', 'dinner', 'brunch'].map(p => ({
-      scope: 'setmenu', id: p, name: 'Сет-меню · ' + t('nav.' + p, 'uk'), sub: p + '.html'
+      scope: 'setmenu', id: p, name: t('adm.setmenu', LANG) + ' · ' + t('nav.' + p, LANG), sub: p + '.html'
     })));
 }
 
@@ -94,8 +96,9 @@ function itemRow(item) {
     `${aesc(item.name)}<small>${aesc(item.sub || '')}${item.group ? ' · ' + aesc(item.group) : ''}</small>`));
 
   const states = ael('div', 'astates');
-  [['auto', 'За розкладом'], ['on', 'Завжди'], ['off', 'Немає']].forEach(([val, label]) => {
-    const b = ael('button', 'sbtn s-' + val + (rule.state === val ? ' on' : ''), label);
+  ['auto', 'on', 'off'].forEach(val => {
+    const b = ael('button', 'sbtn s-' + val + (rule.state === val ? ' on' : ''),
+      aesc(t('adm.state.' + val, LANG)));
     b.type = 'button';
     b.addEventListener('click', () => setRule(item.scope, item.id, { state: val }));
     states.appendChild(b);
@@ -104,7 +107,7 @@ function itemRow(item) {
 
   const sel = ael('select', 'asel');
   sel.disabled = rule.state !== 'auto';
-  const none = ael('option', null, '— без розкладу —');
+  const none = ael('option', null, aesc(t('adm.noSchedule', LANG)));
   none.value = '';
   sel.appendChild(none);
   Object.keys(allSchedules()).forEach(k => {
@@ -116,16 +119,16 @@ function itemRow(item) {
   sel.addEventListener('change', () => setRule(item.scope, item.id, { schedule: sel.value }));
   row.appendChild(sel);
 
-  const mode = ael('button', 'mbtn', rule.mode === 'hide' ? 'Ховати' : 'Приглушити');
+  const mode = ael('button', 'mbtn', aesc(t(rule.mode === 'hide' ? 'adm.mode.hide' : 'adm.mode.dim', LANG)));
   mode.type = 'button';
-  mode.title = 'Як показувати, коли позиція закрита';
+  mode.title = t('adm.mode.title', LANG);
   mode.addEventListener('click', () =>
     setRule(item.scope, item.id, { mode: rule.mode === 'hide' ? 'dim' : 'hide' }));
   row.appendChild(mode);
 
   row.appendChild(ael('div', 'astatus', st.open
-    ? '<span class="ok">доступно</span>'
-    : `<span class="no">${st.manual ? 'немає' : 'поза годинами'}</span>`));
+    ? `<span class="ok">${aesc(t('adm.status.open', LANG))}</span>`
+    : `<span class="no">${aesc(t(st.manual ? 'adm.status.off' : 'adm.status.offhours', LANG))}</span>`));
   return row;
 }
 
@@ -138,12 +141,12 @@ function scheduleEditor() {
     const card = ael('div', 'scard');
     const builtIn = !!SCHEDULES[key] && !draft.schedules[key];
     card.appendChild(ael('h3', null,
-      `${aesc(key)}${builtIn ? '<span class="tagline">вбудований</span>' : ''}`));
+      `${aesc(key)}${builtIn ? `<span class="tagline">${aesc(t('adm.builtIn', LANG))}</span>` : ''}`));
 
     ranges.forEach((r, i) => {
       const line = ael('div', 'sline');
       const days = ael('div', 'sdays');
-      DAY_NAMES.forEach((dn, d) => {
+      dayNames().forEach((dn, d) => {
         const b = ael('button', 'dbtn' + (r.days.includes(d) ? ' on' : ''), dn);
         b.type = 'button';
         b.addEventListener('click', () => {
@@ -173,7 +176,7 @@ function scheduleEditor() {
 
       const del = ael('button', 'xbtn', '×');
       del.type = 'button';
-      del.title = 'Прибрати діапазон';
+      del.title = t('adm.removeRange', LANG);
       del.addEventListener('click', () => {
         const copy = JSON.parse(JSON.stringify(schedules[key])).filter((_, j) => j !== i);
         draft.schedules[key] = copy;
@@ -183,7 +186,7 @@ function scheduleEditor() {
       card.appendChild(line);
     });
 
-    const add = ael('button', 'linkbtn', '+ діапазон');
+    const add = ael('button', 'linkbtn', aesc(t('adm.addRange', LANG)));
     add.type = 'button';
     add.addEventListener('click', () => {
       const copy = JSON.parse(JSON.stringify(schedules[key]));
@@ -192,14 +195,14 @@ function scheduleEditor() {
       persist();
     });
     card.appendChild(add);
-    card.appendChild(ael('p', 'shint', aesc(describeSchedule(key, 'uk'))));
+    card.appendChild(ael('p', 'shint', aesc(describeSchedule(key, LANG))));
     box.appendChild(card);
   });
 
   const create = ael('div', 'scard new');
   const inp = ael('input', 'sname');
-  inp.placeholder = 'назва нового розкладу, напр. breakfast';
-  const btn = ael('button', 'linkbtn', '+ створити розклад');
+  inp.placeholder = t('adm.newSchedulePh', LANG);
+  const btn = ael('button', 'linkbtn', aesc(t('adm.newSchedule', LANG)));
   btn.type = 'button';
   btn.addEventListener('click', () => {
     const key = inp.value.trim();
@@ -216,7 +219,7 @@ function scheduleEditor() {
 function render() {
   const now = restaurantNow();
   document.getElementById('clock').textContent =
-    `${DAY_NAMES[now.day]} ${String(Math.floor(now.minutes / 60)).padStart(2, '0')}:` +
+    `${dayNames()[now.day]} ${String(Math.floor(now.minutes / 60)).padStart(2, '0')}:` +
     `${String(now.minutes % 60).padStart(2, '0')} · ${RESTAURANT_TZ}`;
 
   document.querySelectorAll('.atab').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
@@ -236,7 +239,8 @@ function render() {
 
   const closedCount = source.filter(x => currentRule(x.scope, x.id).state === 'off').length;
   mount.appendChild(ael('p', 'acount',
-    `${rows.length} із ${source.length}${closedCount ? ` · закрито вручну: ${closedCount}` : ''}`));
+    `${rows.length} ${aesc(t('adm.countOf', LANG))} ${source.length}` +
+    (closedCount ? ` · ${aesc(t('adm.closedManually', LANG))}: ${closedCount}` : '')));
 
   const list = ael('div', 'alist');
   rows.forEach(x => list.appendChild(itemRow(x)));
@@ -247,16 +251,51 @@ function render() {
 function buildFile() {
   const clean = { updated: draft.updated, schedules: draft.schedules, rules: draft.rules };
   return `/* ==========================================================================
-   ЩО ЗАРАЗ ДОСТУПНО — згенеровано адмін-панеллю ${clean.updated}
-   Замініть цим файлом assets/overrides.js і запуште, щоб зміни побачили гості.
+   ${t('adm.fileHeader', LANG)}
+   ${clean.updated}
    ========================================================================== */
 
 const OVERRIDES = ${JSON.stringify(clean, null, 2)};
 `;
 }
 
+/* ---------------------------------------------------- мова панелі ------ */
+function applyAdminI18n() {
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-i18n]').forEach(n => (n.innerHTML = t(n.dataset.i18n, LANG)));
+  document.querySelectorAll('[data-i18n-ph]').forEach(n => (n.placeholder = t(n.dataset.i18nPh, LANG)));
+  const exportBtn = document.getElementById('export');
+  if (exportBtn) exportBtn.textContent = t(API_BASE ? 'adm.publish' : 'adm.export', LANG);
+  document.querySelectorAll('.langbtn').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG));
+}
+
+function buildAdminLangSwitch() {
+  const host = document.querySelector('.nav');
+  if (!host) return;
+  const box = ael('div', 'langswitch');
+  box.setAttribute('role', 'group');
+  box.setAttribute('aria-label', t('lang.label', LANG));
+  LANGS.forEach(l => {
+    const b = ael('button', 'langbtn' + (l.code === LANG ? ' on' : ''), l.short);
+    b.type = 'button';
+    b.title = l.label;
+    b.dataset.lang = l.code;
+    b.addEventListener('click', () => {
+      if (l.code === LANG) return;
+      setLang(l.code);
+      LANG = l.code;
+      applyAdminI18n();
+      render();
+    });
+    box.appendChild(b);
+  });
+  host.after(box);
+}
+
 function initAdmin() {
   load();
+  buildAdminLangSwitch();
+  applyAdminI18n();
   if (API_BASE) fetchOverrides().then(ok => { if (ok) render(); });
 
   document.querySelectorAll('.atab').forEach(b =>
@@ -266,7 +305,6 @@ function initAdmin() {
   search.addEventListener('input', () => { filter = search.value; render(); });
 
   const exportBtn = document.getElementById('export');
-  if (API_BASE) exportBtn.textContent = 'Опублікувати на сервері';
 
   exportBtn.addEventListener('click', async () => {
     // З бекендом — публікуємо одразу. Без нього — віддаємо файл на заміну.
@@ -279,13 +317,13 @@ function initAdmin() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ updated: draft.updated, schedules: draft.schedules, rules: draft.rules })
         });
-        exportBtn.textContent = r.ok ? 'Опубліковано ✓' : `Помилка ${r.status}`;
+        exportBtn.textContent = r.ok ? t('adm.published', LANG) : `HTTP ${r.status}`;
         if (r.ok) { try { localStorage.removeItem('sw-overrides'); } catch (e) { /* ignore */ } }
       } catch (e) {
-        exportBtn.textContent = 'Сервер недоступний';
+        exportBtn.textContent = t('adm.offline', LANG);
       }
       exportBtn.disabled = false;
-      setTimeout(() => (exportBtn.textContent = 'Опублікувати на сервері'), 2500);
+      setTimeout(() => (exportBtn.textContent = t('adm.publish', LANG)), 2500);
       return;
     }
     const blob = new Blob([buildFile()], { type: 'text/javascript' });
@@ -300,19 +338,19 @@ function initAdmin() {
     const btn = document.getElementById('copy');
     try {
       await navigator.clipboard.writeText(buildFile());
-      btn.textContent = 'Скопійовано ✓';
+      btn.textContent = t('adm.copied', LANG);
     } catch (e) {
       const ta = document.getElementById('dump');
       ta.value = buildFile();
       ta.style.display = 'block';
       ta.select();
-      btn.textContent = 'Виділено — Ctrl+C';
+      btn.textContent = t('adm.selected', LANG);
     }
-    setTimeout(() => (btn.textContent = 'Скопіювати вміст'), 2500);
+    setTimeout(() => (btn.textContent = t('adm.copy', LANG)), 2500);
   });
 
   document.getElementById('reset').addEventListener('click', () => {
-    if (!confirm('Скинути чернетку до того, що зараз лежить у overrides.js?')) return;
+    if (!confirm(t('adm.confirmReset', LANG))) return;
     try { localStorage.removeItem('sw-overrides'); } catch (e) { /* ignore */ }
     load();
     render();
