@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Рендеринг сторінок, перемикач мов і фільтр за алергенами
+   Рендеринг сторінок, перемикачі мови й теми, фільтр за алергенами
    ========================================================================== */
 
 let LANG = getLang();
@@ -12,6 +12,25 @@ const el = (tag, cls, html) => {
 };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+/* -------------------------------------------------------------------------
+   Злиття офіційних даних із реконструйованими
+   ------------------------------------------------------------------------- */
+(function mergeOfficial() {
+  DISHES.push(...DRESSINGS, ...CANAPES);
+  DRINKS.push(...DESSERT_COCKTAILS);
+
+  DISHES.concat(DRINKS).forEach(d => {
+    const off = OFFICIAL[d.id];
+    if (off) Object.assign(d, off);
+    else if (COMPONENT_UPGRADES[d.id]) Object.assign(d, COMPONENT_UPGRADES[d.id]);
+  });
+
+  MENU_ORDER.lunch.splice(MENU_ORDER.lunch.indexOf('shellfish'), 0, 'dressings');
+  MENU_ORDER.dinner.splice(MENU_ORDER.dinner.indexOf('shellfish'), 0, 'dressings');
+  MENU_ORDER.brunch.splice(MENU_ORDER.brunch.indexOf('shellfish'), 0, 'dressings');
+  DRINK_ORDER.splice(DRINK_ORDER.indexOf('virgin'), 0, 'dessertcocktails');
+})();
 
 /* ------------------------------------------------------- список складу -- */
 function ingLine(item) {
@@ -33,16 +52,37 @@ function ingSearchText(list) {
 }
 
 /* ------------------------------------------------------------- мітки --- */
-function tagList(keys, maybe) {
+function tagList(d, keys, maybe) {
   const box = el('div', 'tags');
   keys.forEach(k => {
     if (!ALLERGENS[k]) return;
     const tag = el('span', 'tag' + (maybe ? ' maybe' : ''));
-    tag.title = aNote(k, LANG);
-    tag.innerHTML = `<span aria-hidden="true">${ALLERGENS[k].icon}</span>${esc(aName(k, LANG))}`;
+    // конкретний злак / горіх / вид, якщо його названо в офіційному листі
+    let detail = '';
+    if (k === 'gluten' && d.g && d.g.length) detail = d.g.map(g => ingName(g, LANG)).join(', ');
+    if (d.n && d.n[k]) detail = ingName(d.n[k], LANG);
+    const removable = !maybe && (d.r || []).includes(k);
+    tag.title = aNote(k, LANG) + (removable ? ' · ' + t('alg.removable', LANG) : '');
+    tag.innerHTML =
+      `<span aria-hidden="true">${ALLERGENS[k].icon}</span>${esc(aName(k, LANG))}` +
+      (detail ? `<span class="cereal">(${esc(detail)})</span>` : '') +
+      (removable ? `<span class="rem" title="${esc(t('alg.removable', LANG))}">R</span>` : '');
     box.appendChild(tag);
   });
   return box;
+}
+
+/* --------------------------------------------------------- джерело --- */
+function sourceBadge(d) {
+  if (d.src && SOURCES[d.src]) {
+    const s = SOURCES[d.src];
+    const b = el('p', 'srcbadge',
+      `<span class="dot" aria-hidden="true">●</span>${esc(t('src.official', LANG))} · ${esc(t('src.reviewed', LANG))} ${esc(s.date)}`);
+    b.title = s.title + ' · ' + s.by + ' · ' + s.date;
+    return b;
+  }
+  return el('p', 'srcbadge est',
+    `<span class="dot" aria-hidden="true">○</span>${esc(t('src.reconstructed', LANG))}`);
 }
 
 /* ------------------------------------------------------- картка страви -- */
@@ -58,9 +98,11 @@ function dishCard(d) {
   ].join(' ').toLowerCase();
 
   const head = el('div', 'dish-head');
-  head.appendChild(el('h3', null, esc(d.name) + (d.veg ? '<span class="badge-veg">veg</span>' : '') + (d.nonalc ? '<span class="badge-veg">0%</span>' : '')));
+  head.appendChild(el('h3', null, esc(d.name) +
+    (d.veg ? '<span class="badge-veg">veg</span>' : '') +
+    (d.nonalc ? '<span class="badge-veg">0%</span>' : '')));
   if (d.price) head.appendChild(el('span', 'price', esc(d.price)));
-  else head.appendChild(el('span', 'price na', esc(t('dish.noPrice', LANG))));
+  else if (d.price === null) head.appendChild(el('span', 'price na', esc(t('dish.noPrice', LANG))));
   card.appendChild(head);
 
   if (d.t) card.appendChild(el('p', 'ua', esc(d.t[LANG] || d.t.en)));
@@ -80,18 +122,22 @@ function dishCard(d) {
 
   card.appendChild(el('p', 'alg-label', esc(t('dish.allergens', LANG))));
   if (d.a && d.a.length) {
-    card.appendChild(tagList(d.a, false));
+    card.appendChild(tagList(d, d.a, false));
   } else {
     const box = el('div', 'tags');
-    box.appendChild(el('span', 'tag none', esc(t('dish.none', LANG))));
+    box.appendChild(el('span', 'tag none',
+      esc(d.noAllergens ? '✓ ' + t('alg.none', LANG) : t('dish.none', LANG))));
     card.appendChild(box);
   }
 
   if (d.m && d.m.length) {
     card.appendChild(el('p', 'alg-label', esc(t('dish.may', LANG))));
-    card.appendChild(tagList(d.m, true));
+    card.appendChild(tagList(d, d.m, true));
   }
 
+  if ((d.r || []).length) card.appendChild(el('p', 'rem-note', esc(t('alg.removableFull', LANG))));
+
+  card.appendChild(sourceBadge(d));
   (d.w || []).forEach(k => card.appendChild(el('p', 'warn', esc(t(k, LANG)))));
   return card;
 }
@@ -108,12 +154,14 @@ function sectionBlock(key, noteKey) {
   return sec;
 }
 
+const SECTION_HINTS = { dressings: 'note.dressings', dessertcocktails: 'note.dessertcocktails' };
+
 /* -------------------------------------------------------- меню зі страв -- */
 function renderMenu(menuKey, mount) {
   MENU_ORDER[menuKey].forEach(secKey => {
     const items = DISHES.filter(d => d.section === secKey && d.menus.includes(menuKey));
     if (!items.length) return;
-    const sec = sectionBlock(secKey);
+    const sec = sectionBlock(secKey, SECTION_HINTS[secKey]);
 
     let grid = el('div', 'grid');
     let currentGroup = null;
@@ -129,6 +177,15 @@ function renderMenu(menuKey, mount) {
     sec.appendChild(grid);
     mount.appendChild(sec);
   });
+}
+
+/* ---------------------------------------------------------- канапе ------ */
+function renderCanapes(mount) {
+  const sec = sectionBlock('canapes');
+  const grid = el('div', 'grid');
+  DISHES.filter(d => d.section === 'canapes').forEach(d => grid.appendChild(dishCard(d)));
+  sec.appendChild(grid);
+  mount.appendChild(sec);
 }
 
 /* ------------------------------------------------------------- сет-меню -- */
@@ -164,7 +221,7 @@ function renderDrinks(mount) {
   DRINK_ORDER.forEach(secKey => {
     const items = DRINKS.filter(d => d.section === secKey);
     if (!items.length) return;
-    const sec = sectionBlock(secKey, SECTION_NOTES[secKey]);
+    const sec = sectionBlock(secKey, SECTION_NOTES[secKey] || SECTION_HINTS[secKey]);
     const grid = el('div', 'grid');
     items.forEach(d => grid.appendChild(dishCard(d)));
     sec.appendChild(grid);
@@ -178,16 +235,19 @@ function renderDrinks(mount) {
     sec.id = 's-' + secKey;
     sec.appendChild(el('h2', null, esc(t('sec.' + secKey, LANG))));
     sec.appendChild(el('p', 'section-en', `${esc(I18N['sec.' + secKey].en)} · ${WINE_SERVE[secKey]}`));
-    sec.appendChild(el('p', 'section-note', esc(aName('sulphites', LANG) + ' — ' + aNote('sulphites', LANG))));
+    sec.appendChild(el('p', 'section-note', esc(t('note.wines', LANG))));
     const ul = el('ul', 'winelist');
     items.forEach(w => {
       const li = el('li');
       li.dataset.allergens = 'sulphites';
       li.dataset.maybe = '';
       li.dataset.search = (w.name + ' ' + w.region).toLowerCase();
-      li.innerHTML = `<div><span class="wname">${esc(w.name)}</span><br>
-        <span class="wregion">${esc(w.region)}</span></div>
-        <span class="wprice">${esc(w.price)}</span>`;
+      const info = el('div');
+      info.innerHTML = `<span class="wname">${esc(w.name)}</span><br>
+        <span class="wregion">${esc(w.region)}</span>`;
+      info.appendChild(tagList({}, ['sulphites'], false));
+      li.appendChild(info);
+      li.appendChild(el('span', 'wprice', esc(w.price)));
       ul.appendChild(li);
     });
     sec.appendChild(ul);
@@ -199,6 +259,10 @@ function renderDrinks(mount) {
 function renderMatrix(mount) {
   const groups = [];
   MENU_ORDER.brunch.forEach(k => {
+    const items = DISHES.filter(d => d.section === k);
+    if (items.length) groups.push({ key: k, items });
+  });
+  ['canapes'].forEach(k => {
     const items = DISHES.filter(d => d.section === k);
     if (items.length) groups.push({ key: k, items });
   });
@@ -235,11 +299,16 @@ function renderMatrix(mount) {
       tr.dataset.maybe = (d.m || []).join(' ');
       const sub = d.t ? (d.t[LANG] || d.t.en) : '';
       tr.dataset.search = (d.name + ' ' + Object.values(d.t || {}).join(' ')).toLowerCase();
-      tr.appendChild(el('td', 'name', `${esc(d.name)}<small>${esc(sub)}</small>`));
+      const official = d.src ? ' <sup title="' + esc(t('src.official', LANG)) + '">✓</sup>' : '';
+      tr.appendChild(el('td', 'name', `${esc(d.name)}${official}<small>${esc(sub)}</small>`));
       ALLERGEN_KEYS.forEach(k => {
         let mark = '', cls = '', title = '';
-        if ((d.a || []).includes(k)) { mark = '●'; cls = 'mark-yes'; title = t('legend.contains', LANG); }
-        else if ((d.m || []).includes(k)) { mark = '○'; cls = 'mark-maybe'; title = t('legend.may', LANG); }
+        if ((d.a || []).includes(k)) {
+          mark = '●'; cls = 'mark-yes'; title = t('legend.contains', LANG);
+          if ((d.r || []).includes(k)) { mark += '<sup>R</sup>'; title += ' · ' + t('legend.removable', LANG); }
+        } else if ((d.m || []).includes(k)) {
+          mark = '○'; cls = 'mark-maybe'; title = t('legend.may', LANG);
+        }
         const cell = el('td', cls, mark);
         if (title) cell.title = aName(k, LANG) + ' — ' + title;
         tr.appendChild(cell);
@@ -363,26 +432,62 @@ function applyI18n() {
   });
 }
 
-/* --------------------------------------------------------- перемикач --- */
-function buildLangSwitch() {
+/* ---------------------------------------------------------- тема -------- */
+const THEMES = ['auto', 'light', 'dark'];
+
+function getTheme() {
+  try {
+    const saved = localStorage.getItem('sw-theme');
+    if (THEMES.includes(saved)) return saved;
+  } catch (e) { /* приватний режим */ }
+  return 'auto';
+}
+
+function applyTheme(mode) {
+  if (mode === 'auto') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.dataset.theme = mode;
+  try { localStorage.setItem('sw-theme', mode); } catch (e) { /* ігноруємо */ }
+}
+
+/* ---------------------------------------------- перемикачі у шапці ------ */
+function buildSwitches() {
   const host = document.querySelector('.nav');
   if (!host) return;
-  const box = el('div', 'langswitch');
-  box.setAttribute('role', 'group');
-  box.setAttribute('aria-label', t('lang.label', LANG));
+
+  const langs = el('div', 'langswitch');
+  langs.setAttribute('role', 'group');
+  langs.setAttribute('aria-label', t('lang.label', LANG));
   LANGS.forEach(l => {
     const b = el('button', 'langbtn' + (l.code === LANG ? ' on' : ''), l.short);
     b.type = 'button';
     b.title = l.label;
+    b.dataset.lang = l.code;
     b.addEventListener('click', () => {
       if (l.code === LANG) return;
       setLang(l.code);
       LANG = l.code;
       renderPage();
     });
-    box.appendChild(b);
+    langs.appendChild(b);
   });
-  host.after(box);
+  host.after(langs);
+
+  const themes = el('div', 'themeswitch');
+  themes.setAttribute('role', 'group');
+  themes.setAttribute('aria-label', t('theme.label', LANG));
+  let current = getTheme();
+  THEMES.forEach(mode => {
+    const b = el('button', 'themebtn' + (mode === current ? ' on' : ''), t('theme.' + mode, LANG));
+    b.type = 'button';
+    b.dataset.theme = mode;
+    b.addEventListener('click', () => {
+      current = mode;
+      applyTheme(mode);
+      themes.querySelectorAll('.themebtn').forEach(x => x.classList.toggle('on', x.dataset.theme === mode));
+    });
+    themes.appendChild(b);
+  });
+  langs.after(themes);
 }
 
 /* ------------------------------------------------------------ сторінка -- */
@@ -390,9 +495,10 @@ let PAGE = null;
 
 function renderPage() {
   applyI18n();
-  document.querySelectorAll('.langbtn').forEach(b => b.classList.toggle('on', b.textContent === LANGS.find(l => l.code === LANG).short));
+  document.querySelectorAll('.langbtn').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG));
+  document.querySelectorAll('.themebtn').forEach(b => (b.textContent = t('theme.' + b.dataset.theme, LANG)));
 
-  ['menu', 'setmenu', 'drinks', 'matrix', 'legend', 'toolbar'].forEach(id => {
+  ['menu', 'setmenu', 'drinks', 'matrix', 'legend', 'toolbar', 'canapes'].forEach(id => {
     const n = document.getElementById(id);
     if (n) n.innerHTML = '';
   });
@@ -404,12 +510,15 @@ function renderPage() {
   } else if (PAGE.kind === 'drinks') {
     renderDrinks(document.getElementById('drinks'));
     buildToolbar(document.getElementById('toolbar'), { searchKey: 'tb.searchDrinks' });
+  } else if (PAGE.kind === 'canapes') {
+    renderCanapes(document.getElementById('canapes'));
+    buildToolbar(document.getElementById('toolbar'), {});
   } else if (PAGE.kind === 'allergens') {
     renderLegend(document.getElementById('legend'));
     renderMatrix(document.getElementById('matrix'));
     buildToolbar(document.getElementById('toolbar'), { searchKey: 'tb.searchTable' });
   } else if (PAGE.kind === 'home') {
-    const n = d => DISHES.filter(x => x.menus.includes(d)).length;
+    const n = d => DISHES.filter(x => x.menus && x.menus.includes(d)).length;
     const set = (k, v) => {
       const e = document.querySelector(`[data-count="${k}"]`);
       if (e) e.textContent = v;
@@ -418,12 +527,14 @@ function renderPage() {
     set('lunch', `${n('lunch')} ${t('count.items', LANG)}`);
     set('dinner', `${n('dinner')} ${t('count.items', LANG)}`);
     set('drinks', `${DRINKS.length + WINES.length} ${t('count.items', LANG)}`);
+    set('canapes', `${n('canapes')} ${t('count.items', LANG)}`);
     set('all', `${DISHES.length + DRINKS.length} ${t('count.inTable', LANG)}`);
   }
 }
 
 function initPage(config) {
   PAGE = config;
-  buildLangSwitch();
+  applyTheme(getTheme());
+  buildSwitches();
   renderPage();
 }

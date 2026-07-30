@@ -484,6 +484,104 @@ const I18N = {
     ru: 'Цену этой позиции уточните, пожалуйста, у официанта.'
   },
 
+  /* --------------------------------------------- official source badges --- */
+  'src.official': {
+    uk: 'Офіційний лист алергенів ресторану', en: 'Restaurant’s official allergen sheet',
+    es: 'Ficha oficial de alérgenos del restaurante', it: 'Scheda allergeni ufficiale del ristorante',
+    de: 'Offizielles Allergenblatt des Restaurants', ru: 'Официальный лист аллергенов ресторана'
+  },
+  'src.reviewed': {
+    uk: 'перевірено', en: 'reviewed', es: 'revisada', it: 'verificata', de: 'geprüft', ru: 'проверено'
+  },
+  'src.reconstructed': {
+    uk: 'Реконструйовано з опису в меню — уточніть у офіціанта',
+    en: 'Reconstructed from the menu description — please check with your server',
+    es: 'Reconstruido a partir de la carta — consúltelo con el camarero',
+    it: 'Ricostruito dalla descrizione del menu — chiedete conferma al personale',
+    de: 'Aus der Menübeschreibung rekonstruiert — bitte beim Service nachfragen',
+    ru: 'Реконструировано по описанию в меню — уточните у официанта'
+  },
+  'alg.none': {
+    uk: 'Без алергенів за офіційним листом', en: 'No allergens per the official sheet',
+    es: 'Sin alérgenos según la ficha oficial', it: 'Nessun allergene secondo la scheda ufficiale',
+    de: 'Laut offiziellem Blatt keine Allergene', ru: 'Без аллергенов по официальному листу'
+  },
+  'alg.removable': {
+    uk: 'можна прибрати', en: 'can be left out', es: 'se puede quitar',
+    it: 'si può togliere', de: 'kann weggelassen werden', ru: 'можно убрать'
+  },
+  'alg.removableFull': {
+    uk: 'Позначка R означає, що цей інгредієнт можна прибрати зі страви — попросіть офіціанта.',
+    en: 'An R mark means that ingredient can be left out of the dish — just ask your server.',
+    es: 'La marca R indica que ese ingrediente se puede omitir del plato: pídalo al camarero.',
+    it: 'La lettera R indica che l’ingrediente può essere escluso dal piatto: chiedetelo al personale.',
+    de: 'Ein R bedeutet, dass diese Zutat weggelassen werden kann — sagen Sie es einfach dem Service.',
+    ru: 'Метка R означает, что этот ингредиент можно убрать из блюда — попросите официанта.'
+  },
+  'legend.removable': {
+    uk: 'можна прибрати', en: 'removable', es: 'se puede quitar', it: 'rimovibile', de: 'entfernbar', ru: 'можно убрать'
+  },
+
+  /* ------------------------------------------------------------ themes --- */
+  'theme.label': { uk: 'Тема', en: 'Theme', es: 'Tema', it: 'Tema', de: 'Design', ru: 'Тема' },
+  'theme.auto':  { uk: 'Авто', en: 'Auto', es: 'Auto', it: 'Auto', de: 'Auto', ru: 'Авто' },
+  'theme.light': { uk: 'Світла', en: 'Light', es: 'Claro', it: 'Chiaro', de: 'Hell', ru: 'Светлая' },
+  'theme.dark':  { uk: 'Темна', en: 'Dark', es: 'Oscuro', it: 'Scuro', de: 'Dunkel', ru: 'Тёмная' },
+
+  /* --------------------------------------------------- canapes / extras --- */
+  'nav.canapes': { uk: 'Канапе', en: 'Canapés', es: 'Canapés', it: 'Canapé', de: 'Canapés', ru: 'Канапе' },
+  'page.canapes.lead': {
+    uk: 'Канапе для приватних заходів. Алергени — з офіційного листа ресторану; склад у листі не наводиться, тож назва описує страву.',
+    en: 'Canapés for private events. Allergens come from the restaurant’s official sheet; the sheet lists no ingredients, so the name describes the bite.',
+    es: 'Canapés para eventos privados. Los alérgenos proceden de la ficha oficial del restaurante; la ficha no detalla ingredientes, por eso el nombre describe el bocado.',
+    it: 'Canapé per eventi privati. Gli allergeni provengono dalla scheda ufficiale del ristorante; la scheda non elenca gli ingredienti, quindi è il nome a descrivere il boccone.',
+    de: 'Canapés für private Anlässe. Die Allergene stammen aus dem offiziellen Blatt des Restaurants; Zutaten sind dort nicht aufgeführt, daher beschreibt der Name das Häppchen.',
+    ru: 'Канапе для частных мероприятий. Аллергены — из официального листа ресторана; состав в листе не приводится, поэтому название описывает закуску.'
+  },
+  'card.canapes': {
+    uk: 'Канапе для приватних заходів — 14 позицій з офіційними алергенами.',
+    en: 'Canapés for private events — 14 bites with official allergen data.',
+    es: 'Canapés para eventos privados: 14 bocados con datos oficiales de alérgenos.',
+    it: 'Canapé per eventi privati: 14 bocconi con dati ufficiali sugli allergeni.',
+    de: 'Canapés für private Anlässe — 14 Häppchen mit offiziellen Allergendaten.',
+    ru: 'Канапе для частных мероприятий — 14 позиций с официальными аллергенами.'
+  },
+  'sec.dressings': {
+    uk: 'Соуси та заправки', en: 'Sauces & Dressings', es: 'Salsas y aliños',
+    it: 'Salse e condimenti', de: 'Saucen & Dressings', ru: 'Соусы и заправки'
+  },
+  'note.dressings': {
+    uk: 'Соуси, які подають до страв і салатів. Дані повністю з офіційного листа.',
+    en: 'The sauces served with dishes and salads. Straight from the official sheet.',
+    es: 'Las salsas que acompañan a los platos y ensaladas. Directamente de la ficha oficial.',
+    it: 'Le salse servite con piatti e insalate. Direttamente dalla scheda ufficiale.',
+    de: 'Die Saucen zu Gerichten und Salaten. Direkt aus dem offiziellen Blatt.',
+    ru: 'Соусы, которые подают к блюдам и салатам. Полностью из официального листа.'
+  },
+  'sec.canapes': {
+    uk: 'Канапе', en: 'Canapés', es: 'Canapés', it: 'Canapé', de: 'Canapés', ru: 'Канапе'
+  },
+  'sec.dessertcocktails': {
+    uk: 'Десертні коктейлі', en: 'Dessert Cocktails', es: 'Cócteles de postre',
+    it: 'Cocktail da dessert', de: 'Dessert-Cocktails', ru: 'Десертные коктейли'
+  },
+  'note.dessertcocktails': {
+    uk: 'Алергени з офіційного листа. Кавові коктейлі містять молоко; сліди глютену можливі через спирти зернового походження.',
+    en: 'Allergens from the official sheet. The coffee cocktails contain milk; traces of gluten are possible from grain spirits.',
+    es: 'Alérgenos de la ficha oficial. Los cócteles de café llevan leche; son posibles trazas de gluten por destilados de cereal.',
+    it: 'Allergeni dalla scheda ufficiale. I cocktail al caffè contengono latte; possibili tracce di glutine dai distillati di cereali.',
+    de: 'Allergene aus dem offiziellen Blatt. Die Kaffeecocktails enthalten Milch; Glutenspuren aus Getreidedestillaten sind möglich.',
+    ru: 'Аллергены из официального листа. Кофейные коктейли содержат молоко; возможны следы глютена от зерновых спиртов.'
+  },
+  'note.wines': {
+    uk: 'Усі вина, ігристі та сидр містять сульфіти.',
+    en: 'All wines, sparkling wines and cider contain sulphites.',
+    es: 'Todos los vinos, espumosos y la sidra contienen sulfitos.',
+    it: 'Tutti i vini, gli spumanti e il sidro contengono solfiti.',
+    de: 'Alle Weine, Schaumweine und der Cider enthalten Sulfite.',
+    ru: 'Все вина, игристые и сидр содержат сульфиты.'
+  },
+
   /* --------------------------------------------------------- sections --- */
   'sec.brunch':          { uk: 'Бранч', en: 'Brunch', es: 'Brunch', it: 'Brunch', de: 'Brunch', ru: 'Бранч' },
   'sec.starters':        { uk: 'Закуски', en: 'Starters', es: 'Entrantes', it: 'Antipasti', de: 'Vorspeisen', ru: 'Закуски' },

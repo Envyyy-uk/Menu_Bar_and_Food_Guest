@@ -324,6 +324,23 @@ const ING = {
   'crushed-ice':      { uk: 'дроблений лід', en: 'crushed ice', es: 'hielo picado', it: 'ghiaccio tritato', de: 'Crushed Ice', ru: 'дроблёный лёд' },
   'lemon-zest':       { uk: 'цедра лимона', en: 'lemon zest', es: 'ralladura de limón', it: 'scorza di limone', de: 'Zitronenzeste', ru: 'цедра лимона' },
 
+  'wheat':            { uk: 'пшениця', en: 'wheat', es: 'trigo', it: 'frumento', de: 'Weizen', ru: 'пшеница' },
+  'rye':              { uk: 'жито', en: 'rye', es: 'centeno', it: 'segale', de: 'Roggen', ru: 'рожь' },
+  'oats':             { uk: 'овес', en: 'oats', es: 'avena', it: 'avena', de: 'Hafer', ru: 'овёс' },
+  'balsamic':         { uk: 'бальзамічний оцет', en: 'balsamic vinegar', es: 'vinagre balsámico', it: 'aceto balsamico', de: 'Balsamico-Essig', ru: 'бальзамический уксус' },
+  'chipotle':         { uk: 'чилі чипотле', en: 'chipotle chilli', es: 'chile chipotle', it: 'peperoncino chipotle', de: 'Chipotle-Chili', ru: 'чили чипотле' },
+  'ponzu':            { uk: 'соус понзу', en: 'ponzu sauce', es: 'salsa ponzu', it: 'salsa ponzu', de: 'Ponzu-Sauce', ru: 'соус понзу' },
+  'yuzu':             { uk: 'юдзу', en: 'yuzu', es: 'yuzu', it: 'yuzu', de: 'Yuzu', ru: 'юдзу' },
+  'coffee':           { uk: 'кава', en: 'coffee', es: 'café', it: 'caffè', de: 'Kaffee', ru: 'кофе' },
+  'espresso':         { uk: 'еспресо', en: 'espresso', es: 'espresso', it: 'espresso', de: 'Espresso', ru: 'эспрессо' },
+  'whipped-cream':    { uk: 'збиті вершки', en: 'whipped cream', es: 'nata montada', it: 'panna montata', de: 'Schlagsahne', ru: 'взбитые сливки' },
+  'coffee-liqueur':   { uk: 'кавовий лікер', en: 'coffee liqueur', es: 'licor de café', it: 'liquore al caffè', de: 'Kaffeelikör', ru: 'кофейный ликёр' },
+  'irish-cream':      { uk: 'вершковий лікер', en: 'Irish cream liqueur', es: 'licor de crema irlandesa', it: 'liquore alla crema irlandese', de: 'Irish Cream Likör', ru: 'сливочный ликёр' },
+  'hazelnut-liqueur': { uk: 'лікер із лісового горіха', en: 'hazelnut liqueur', es: 'licor de avellana', it: 'liquore alla nocciola', de: 'Haselnusslikör', ru: 'ликёр из лесного ореха' },
+  'galliano':         { uk: 'ванільний лікер Galliano', en: 'Galliano vanilla liqueur', es: 'licor de vainilla Galliano', it: 'liquore alla vaniglia Galliano', de: 'Galliano Vanillelikör', ru: 'ванильный ликёр Galliano' },
+  'walnut':           { uk: 'волоський горіх', en: 'walnut', es: 'nuez', it: 'noce', de: 'Walnuss', ru: 'грецкий орех' },
+  'hazelnut':         { uk: 'лісовий горіх', en: 'hazelnut', es: 'avellana', it: 'nocciola', de: 'Haselnuss', ru: 'лесной орех' },
+
   /* -------------------------------------------------- категорії напоїв --- */
   'vodka':            { uk: 'горілка', en: 'vodka', es: 'vodka', it: 'vodka', de: 'Wodka', ru: 'водка' },
   'raspberry-vodka':  { uk: 'малинова горілка', en: 'raspberry vodka', es: 'vodka de frambuesa', it: 'vodka al lampone', de: 'Himbeerwodka', ru: 'малиновая водка' },
