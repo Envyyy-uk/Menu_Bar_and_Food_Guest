@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smith &amp; Wollensky — довідник меню та бару</title>
+<meta name="description" content="Меню Smith &amp; Wollensky: бранч, ланч, вечеря та напої. Склад кожної страви та алергени.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <b>Smith &amp; Wollensky</b>
+      <span>Menu &amp; Bar Guide</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html" aria-current="page">Головна</a>
+      <a href="brunch.html">Brunch</a>
+      <a href="lunch.html">Lunch</a>
+      <a href="dinner.html">Dinner</a>
+      <a href="drinks.html">Напої</a>
+      <a href="allergens.html">Алергени</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <h1>Довідник меню та бару</h1>
+    <div class="rule"></div>
+    <p>Усі страви й напої з меню, розібрані на складники, з позначенням алергенів.
+       Обери меню нижче або відкрий зведену таблицю алергенів.</p>
+  </section>
+
+  <div class="cards">
+    <a class="card" href="brunch.html">
+      <span class="kicker">Brunch Menu</span>
+      <h2>Бранч</h2>
+      <p>Бенедикти, панкейки, Sunday Roast, вафлі з куркою — плюс повна стейкова карта.</p>
+      <span class="count" data-count="brunch"></span>
+    </a>
+    <a class="card" href="lunch.html">
+      <span class="kicker">Lunch Menu</span>
+      <h2>Ланч</h2>
+      <p>Закуски, салати, основні страви, стейки сухого визрівання та гарніри.</p>
+      <span class="count" data-count="lunch"></span>
+    </a>
+    <a class="card" href="dinner.html">
+      <span class="kicker">Dinner Menu</span>
+      <h2>Вечеря</h2>
+      <p>Те саме ядро, що й ланч, без бургера з курки та стейк-сендвіча.</p>
+      <span class="count" data-count="dinner"></span>
+    </a>
+    <a class="card" href="drinks.html">
+      <span class="kicker">Bar &amp; Wine</span>
+      <h2>Напої</h2>
+      <p>Коктейлі, мартіні, Bloody Marys, безалкогольні, bottomless brunch і вина за келихом.</p>
+      <span class="count" data-count="drinks"></span>
+    </a>
+    <a class="card accent" href="allergens.html">
+      <span class="kicker">Allergens</span>
+      <h2>Алергени</h2>
+      <p>Зведена таблиця всіх позицій × 14 обов’язкових алергенів, з фільтром і пошуком.</p>
+      <span class="count" data-count="all"></span>
+    </a>
+  </div>
+
+  <div class="notice">
+    <b>Важливо.</b> Це неофіційний робочий довідник, складений із фотографій меню.
+    Склад страв відновлено за описами в меню та стандартними рецептурами — це <b>не</b>
+    офіційна декларація алергенів ресторану. Позначки «може містити» враховують типові
+    інгредієнти, спільний фритюр і гриль. Перед подачею гостю з алергією завжди звіряйся
+    з кухнею та офіційним allergen-листом закладу.
+  </div>
+
+  <section class="section">
+    <h2>Що всередині</h2>
+    <p class="section-en">Як користуватися</p>
+    <div class="cards">
+      <div class="card">
+        <h2 style="font-size:20px">Пошук і фільтр</h2>
+        <p>На кожній сторінці меню є пошук за назвою чи складником і фільтр за алергенами:
+           познач те, чого гість уникає — відповідні позиції приглушаться.</p>
+      </div>
+      <div class="card">
+        <h2 style="font-size:20px">Дві категорії міток</h2>
+        <p>Суцільна червона мітка — алерген заявлений або очевидний зі складу.
+           Пунктирна сіра — «може містити»: рецептура закладу або крос-контамінація.</p>
+      </div>
+      <div class="card">
+        <h2 style="font-size:20px">Сет-меню</h2>
+        <p>Внизу сторінок Brunch / Lunch / Dinner — склад сет-меню з посиланнями
+           на картки відповідних страв.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Smith &amp; Wollensky — Menu &amp; Bar Guest Guide</span>
+    <span>Ціни у фунтах, включають ПДВ. Може додаватися 15% сервісного збору.</span>
+  </div>
+</footer>
+
+<script src="assets/allergens.js"></script>
+<script src="assets/data-food.js"></script>
+<script src="assets/data-drinks.js"></script>
+<script>
+  const n = k => DISHES.filter(d => d.menus.includes(k)).length;
+  const set = (k, t) => {
+    const e = document.querySelector(`[data-count="${k}"]`);
+    if (e) e.textContent = t;
+  };
+  set('brunch', n('brunch') + ' позицій');
+  set('lunch', n('lunch') + ' позицій');
+  set('dinner', n('dinner') + ' позицій');
+  set('drinks', (DRINKS.length + WINES.length) + ' позицій');
+  set('all', (DISHES.length + DRINKS.length) + ' позицій у таблиці');
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dinner — Smith &amp; Wollensky</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <b>Smith &amp; Wollensky</b>
+      <span>Menu &amp; Bar Guide</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Головна</a>
+      <a href="brunch.html">Brunch</a>
+      <a href="lunch.html">Lunch</a>
+      <a href="dinner.html" aria-current="page">Dinner</a>
+      <a href="drinks.html">Напої</a>
+      <a href="allergens.html">Алергени</a>
+    </nav>
+  </div>
+</header>
+
+<div id="toolbar"></div>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Dinner Menu</h1>
+    <div class="rule"></div>
+    <p>Вечірня карта: те саме ядро, що й ланч, без бургера з курячим філе та стейк-сендвіча.</p>
+  </section>
+
+  <div class="notice">
+    <b>Нагадування.</b> Склад відновлено за описами меню — перед подачею гостю з алергією
+    звіряйся з кухнею. Пунктирні мітки означають «може містити».
+  </div>
+
+  <div id="menu"></div>
+  <div id="setmenu"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><a href="index.html">← До всіх меню</a></span>
+    <span>Ціни у фунтах, включають ПДВ. Може додаватися 15% сервісного збору.</span>
+  </div>
+</footer>
+
+<script src="assets/allergens.js"></script>
+<script src="assets/data-food.js"></script>
+<script src="assets/data-drinks.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  renderMenu('dinner', document.getElementById('menu'));
+  renderSetMenu('dinner', document.getElementById('setmenu'));
+  buildToolbar(document.getElementById('toolbar'), {});
+</script>
+</body>
+</html>

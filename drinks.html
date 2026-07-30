@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Напої — Smith &amp; Wollensky</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <b>Smith &amp; Wollensky</b>
+      <span>Menu &amp; Bar Guide</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Головна</a>
+      <a href="brunch.html">Brunch</a>
+      <a href="lunch.html">Lunch</a>
+      <a href="dinner.html">Dinner</a>
+      <a href="drinks.html" aria-current="page">Напої</a>
+      <a href="allergens.html">Алергени</a>
+    </nav>
+  </div>
+</header>
+
+<div id="toolbar"></div>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Бар і винна карта</h1>
+    <div class="rule"></div>
+    <p>Коктейлі, мартіні й мангеттени, Bloody Marys, bottomless brunch, безалкогольні коктейлі
+       та вина за келихом — зі складом і алергенами.</p>
+  </section>
+
+  <div class="notice">
+    <b>Три речі, про які найчастіше питають.</b>
+    Коктейлі з яєчним білком (Cherry Blossom, Almost Fit, Whiskey Melon) містять <b>сирий білок</b>.
+    Усі Bloody Marys містять вустерський соус — це <b>анчоуси</b> (риба) і зазвичай солод (глютен).
+    Усі вина, ігристі та сидр містять <b>сульфіти</b>.
+  </div>
+
+  <div id="drinks"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><a href="index.html">← До всіх меню</a></span>
+    <span>Ціни у фунтах, включають ПДВ. Може додаватися 15% сервісного збору.</span>
+  </div>
+</footer>
+
+<script src="assets/allergens.js"></script>
+<script src="assets/data-food.js"></script>
+<script src="assets/data-drinks.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  renderDrinks(document.getElementById('drinks'));
+  buildToolbar(document.getElementById('toolbar'), { placeholder: 'Пошук за назвою напою або інгредієнтом…' });
+</script>
+</body>
+</html>
