@@ -564,6 +564,47 @@ function buildSwitches() {
   langs.after(themes);
 }
 
+
+/* ---------------------------------------------------- розклад подачі --- */
+function applySchedule() {
+  const now = restaurantNow();
+
+  // банер, коли час підмінено через ?at=
+  document.querySelectorAll('.preview-banner').forEach(n => n.remove());
+  if (now.preview) {
+    const b = el('div', 'preview-banner', `${esc(t('sched.preview', LANG))}: ${esc(now.preview)}`);
+    document.body.prepend(b);
+  }
+
+  const mark = (node, cfg) => {
+    if (!node || !cfg) return;
+    node.querySelectorAll(':scope > .sched-note').forEach(n => n.remove());
+    const open = isServingNow(cfg.key, now);
+    node.classList.toggle('scheduled-off', !open);
+    node.style.display = (!open && cfg.mode === 'hide') ? 'none' : '';
+    if (!open && cfg.mode !== 'hide') {
+      node.prepend(el('p', 'sched-note',
+        `<b>${esc(t('sched.closed', LANG))}.</b> ${esc(t('sched.servedAt', LANG))} ${esc(describeSchedule(cfg.key, LANG))}`));
+    }
+  };
+
+  Object.entries(SCHEDULE_OF.dish).forEach(([id, cfg]) => mark(document.getElementById('d-' + id), cfg));
+  Object.entries(SCHEDULE_OF.section).forEach(([key, cfg]) => mark(document.getElementById('s-' + key), cfg));
+  if (PAGE && PAGE.menu) mark(document.querySelector('.setmenu'), SCHEDULE_OF.setmenu[PAGE.menu]);
+
+  const pageCfg = PAGE && SCHEDULE_OF.page[PAGE.menu || PAGE.kind];
+  if (pageCfg) {
+    const host = document.querySelector('main .notice');
+    const open = isServingNow(pageCfg.key, now);
+    document.querySelectorAll('.page-sched').forEach(n => n.remove());
+    if (!open && host) {
+      host.after(el('div', 'notice page-sched',
+        `<b>${esc(t('sched.closed', LANG))}.</b> ${esc(t('sched.pageClosed', LANG))} ` +
+        `${esc(t('sched.servedAt', LANG))} ${esc(describeSchedule(pageCfg.key, LANG))}`));
+    }
+  }
+}
+
 /* ------------------------------------------------------------ сторінка -- */
 let PAGE = null;
 
@@ -610,6 +651,8 @@ function renderPage() {
       + DESSERT_WINES.length} ${t('count.items', LANG)}`);
     set('all', `${DISHES.length + DRINKS.length} ${t('count.inTable', LANG)}`);
   }
+
+  applySchedule();
 }
 
 function initPage(config) {
@@ -617,4 +660,6 @@ function initPage(config) {
   applyTheme(getTheme());
   buildSwitches();
   renderPage();
+  // сторінка сама перемикається на межі години — перезавантажувати не треба
+  setInterval(applySchedule, 30000);
 }

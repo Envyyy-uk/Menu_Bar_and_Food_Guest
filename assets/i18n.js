@@ -676,6 +676,32 @@ const I18N = {
     ru: 'Коктейли, вина по бокалам, а также коньяк, ром, виски и ликёры.'
   },
 
+  /* --------------------------------------------------------- розклад --- */
+  'sched.days': {
+    uk: 'Нд,Пн,Вт,Ср,Чт,Пт,Сб', en: 'Sun,Mon,Tue,Wed,Thu,Fri,Sat',
+    es: 'Dom,Lun,Mar,Mié,Jue,Vie,Sáb', it: 'Dom,Lun,Mar,Mer,Gio,Ven,Sab',
+    de: 'So,Mo,Di,Mi,Do,Fr,Sa', ru: 'Вс,Пн,Вт,Ср,Чт,Пт,Сб'
+  },
+  'sched.closed': {
+    uk: 'Зараз не подається', en: 'Not served right now', es: 'Ahora no se sirve',
+    it: 'Al momento non disponibile', de: 'Derzeit nicht im Angebot', ru: 'Сейчас не подаётся'
+  },
+  'sched.servedAt': {
+    uk: 'Подається', en: 'Served', es: 'Se sirve', it: 'Servito', de: 'Serviert', ru: 'Подаётся'
+  },
+  'sched.pageClosed': {
+    uk: 'Це меню зараз не подається. Нижче — повний перелік із розкладом.',
+    en: 'This menu is not being served right now. The full list, with its hours, is below.',
+    es: 'Esta carta no se sirve en este momento. Abajo está la lista completa con su horario.',
+    it: 'Questo menu al momento non è servito. Sotto trovate l’elenco completo con gli orari.',
+    de: 'Diese Karte wird derzeit nicht serviert. Unten steht die vollständige Liste mit den Zeiten.',
+    ru: 'Это меню сейчас не подаётся. Ниже — полный перечень с расписанием.'
+  },
+  'sched.preview': {
+    uk: 'Режим перегляду часу', en: 'Time preview mode', es: 'Modo de vista previa horaria',
+    it: 'Modalità anteprima orario', de: 'Zeit-Vorschaumodus', ru: 'Режим предпросмотра времени'
+  },
+
   /* ------------------------------------------------------ section tabs --- */
   'tabs.all': { uk: 'Усе', en: 'All', es: 'Todo', it: 'Tutto', de: 'Alle', ru: 'Всё' },
   'tabs.label': {
