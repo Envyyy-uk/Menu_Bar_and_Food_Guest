@@ -418,7 +418,20 @@ table.matrix td sup { font-size: 8.5px; color: var(--accent); font-weight: 700; 
 
 /* -------------------------------------------------------- адмін-панель --- */
 .admin main { padding-bottom: 40px; }
-.abar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 24px 0 12px; }
+.abar {
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  margin: 0 -20px 12px; padding: 14px 20px 12px;
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule);
+}
+.anote {
+  background: var(--warn-bg); border: 1px solid var(--gold-soft);
+  border-radius: var(--radius); padding: 4px 18px; margin: 0 0 20px; font-size: 14.5px;
+}
+.anote summary { cursor: pointer; padding: 10px 0; color: var(--ink-soft); font-size: 14px; }
+.anote summary:hover { color: var(--accent); }
+.anote p { margin: 0 0 12px; color: var(--ink-soft); line-height: 1.5; }
 .atabs { display: flex; gap: 4px; flex-wrap: wrap; }
 .atab {
   font: inherit; font-size: 14px; cursor: pointer; padding: 8px 16px; border-radius: 999px;
@@ -489,9 +502,20 @@ table.matrix td sup { font-size: 8.5px; color: var(--accent); font-weight: 700; 
 .scard.new .sname { flex: 1 1 180px; }
 
 @media (max-width: 720px) {
-  .arow { grid-template-columns: 1fr; }
+  /* один рядок — одна позиція, пальцем має влучати з першого разу */
+  .arow { grid-template-columns: 1fr; gap: 12px; padding: 14px; }
   .astatus { text-align: left; }
-  .aclock { margin-left: 0; }
+  .aclock { margin-left: 0; font-size: 12.5px; }
+  .abar { padding-top: 10px; }
+  .atab { padding: 9px 14px; }
+  .astates { width: 100%; }
+  .sbtn { flex: 1; padding: 12px 6px; font-size: 13.5px; }
+  .asel, .mbtn { width: 100%; padding: 11px 12px; }
+  .mbtn { text-align: center; }
+  .dbtn { width: 40px; padding: 11px 0; font-size: 13px; }
+  .stime { flex: 1; min-width: 110px; padding: 10px; }
+  .aactions .filter-toggle { flex: 1 1 auto; }
+  .sched-editor { grid-template-columns: 1fr; }
 }
 
 .empty { text-align: center; color: var(--ink-faint); padding: 50px 0; font-style: italic; }
