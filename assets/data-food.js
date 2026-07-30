@@ -577,29 +577,6 @@ const DISHES = [
     t: { uk: 'Класичний «Цезар» — гарнір', en: 'Classic Caesar — side portion', es: 'César clásica — guarnición', it: 'Caesar classica — porzione di contorno', de: 'Klassischer Caesar — Beilagenportion', ru: 'Классический «Цезарь» — гарнир' },
     ing: ['baby-gem', 'aged-parmesan', ['caesar-dressing', ['egg-yolk', 'anchovies', 'garlic', 'mustard']], 'croutons'],
     a: ['milk', 'eggs', 'fish', 'mustard', 'gluten'], m: ['sulphites']
-  },
-
-  /* ----------------------------------------------------------- DESSERTS -- */
-  {
-    id: 'panna-cotta', section: 'desserts', menus: ['lunch', 'dinner', 'brunch'],
-    name: 'Black Sesame Panna Cotta', price: '—', desc: 'Peach & jasmine sauce, sesame tuile',
-    t: { uk: 'Панакота з чорним кунжутом', en: 'Black sesame panna cotta', es: 'Panna cotta de sésamo negro', it: 'Panna cotta al sesamo nero', de: 'Schwarze-Sesam-Panna-cotta', ru: 'Панакота с чёрным кунжутом' },
-    ing: ['cream', 'milk', 'black-sesame', 'gelatine', 'peach-jasmine', ['sesame-tuile', ['wheat-flour', 'sugar']]],
-    a: ['milk', 'sesame', 'gluten'], m: ['eggs', 'soya', 'nuts']
-  },
-  {
-    id: 'banana-cake', section: 'desserts', menus: ['lunch', 'dinner'],
-    name: 'Spiced Banana Cake', price: '—', desc: 'Toffee & banana mousse, rum & raisin ice cream',
-    t: { uk: 'Пряний банановий кекс', en: 'Spiced banana cake', es: 'Bizcocho de plátano especiado', it: 'Torta di banana speziata', de: 'Gewürz-Bananenkuchen', ru: 'Пряный банановый кекс' },
-    ing: [['bread', ['wheat-flour', 'egg', 'butter', 'sugar', 'spices']], 'banana', 'toffee', 'cream', 'rum-raisin-ice'],
-    a: ['gluten', 'eggs', 'milk', 'sulphites'], m: ['nuts', 'soya']
-  },
-  {
-    id: 'ice-cream', section: 'desserts', menus: ['lunch', 'dinner', 'brunch'],
-    name: 'Selection of Ice Creams or Sorbets', price: '—', desc: "Ask for today's flavours",
-    t: { uk: 'Морозиво або сорбети на вибір', en: 'A choice of ice creams or sorbets', es: 'Selección de helados o sorbetes', it: 'Selezione di gelati o sorbetti', de: 'Auswahl an Eis oder Sorbets', ru: 'Мороженое или сорбеты на выбор' },
-    ing: [['ice-cream', ['milk', 'cream', 'sugar']], ['sorbet', ['fruit-puree', 'sugar', 'water']]],
-    a: ['milk'], m: ['eggs', 'nuts', 'gluten', 'soya', 'sesame'], w: ['warn.iceCreamVaries']
   }
 ];
 

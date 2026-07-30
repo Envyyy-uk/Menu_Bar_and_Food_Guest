@@ -16,9 +16,12 @@ const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 /* -------------------------------------------------------------------------
    Злиття офіційних даних із реконструйованими
    ------------------------------------------------------------------------- */
+const DESSERT_ORDER = ['desserts', 'dessertcocktails', 'teacoffee'];
+const DESSERT_WINE_ORDER = ['dessertwine', 'port', 'sherry'];
+
 (function mergeOfficial() {
-  DISHES.push(...DRESSINGS, ...CANAPES);
-  DRINKS.push(...DESSERT_COCKTAILS);
+  DISHES.push(...DRESSINGS, ...CANAPES, ...DESSERTS);
+  DRINKS.push(...DESSERT_COCKTAILS, ...HOT_DRINKS, ...SPIRITS);
 
   DISHES.concat(DRINKS).forEach(d => {
     const off = OFFICIAL[d.id];
@@ -26,10 +29,9 @@ const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
     else if (COMPONENT_UPGRADES[d.id]) Object.assign(d, COMPONENT_UPGRADES[d.id]);
   });
 
-  MENU_ORDER.lunch.splice(MENU_ORDER.lunch.indexOf('shellfish'), 0, 'dressings');
-  MENU_ORDER.dinner.splice(MENU_ORDER.dinner.indexOf('shellfish'), 0, 'dressings');
-  MENU_ORDER.brunch.splice(MENU_ORDER.brunch.indexOf('shellfish'), 0, 'dressings');
-  DRINK_ORDER.splice(DRINK_ORDER.indexOf('virgin'), 0, 'dessertcocktails');
+  ['lunch', 'dinner', 'brunch'].forEach(m =>
+    MENU_ORDER[m].splice(MENU_ORDER[m].indexOf('shellfish'), 0, 'dressings'));
+  DRINK_ORDER.push(...SPIRIT_ORDER);
 })();
 
 /* ------------------------------------------------------- список складу -- */
@@ -154,7 +156,10 @@ function sectionBlock(key, noteKey) {
   return sec;
 }
 
-const SECTION_HINTS = { dressings: 'note.dressings', dessertcocktails: 'note.dessertcocktails' };
+const SECTION_HINTS = {
+  dressings: 'note.dressings', dessertcocktails: 'note.dessertcocktails',
+  cognac: 'note.spirits', teacoffee: 'note.teacoffee'
+};
 
 /* -------------------------------------------------------- меню зі страв -- */
 function renderMenu(menuKey, mount) {
@@ -216,6 +221,32 @@ function renderSetMenu(menuKey, mount) {
   mount.appendChild(box);
 }
 
+/* ------------------------------------------------------- список вин ------ */
+function wineSection(secKey, items, defaultServe) {
+  const sec = el('section', 'section');
+  sec.id = 's-' + secKey;
+  sec.appendChild(el('h2', null, esc(t('sec.' + secKey, LANG))));
+  const en = I18N['sec.' + secKey].en;
+  sec.appendChild(el('p', 'section-en', defaultServe ? `${esc(en)} · ${defaultServe}` : esc(en)));
+  sec.appendChild(el('p', 'section-note', esc(t('note.wines', LANG))));
+  const ul = el('ul', 'winelist');
+  items.forEach(w => {
+    const li = el('li');
+    li.dataset.allergens = 'sulphites';
+    li.dataset.maybe = '';
+    li.dataset.search = (w.name + ' ' + w.region).toLowerCase();
+    const info = el('div');
+    info.innerHTML = `<span class="wname">${esc(w.name)}</span><br>
+      <span class="wregion">${esc(w.region)}${w.serve ? ' · ' + esc(w.serve) : ''}</span>`;
+    info.appendChild(tagList({}, ['sulphites'], false));
+    li.appendChild(info);
+    li.appendChild(el('span', 'wprice', esc(w.price)));
+    ul.appendChild(li);
+  });
+  sec.appendChild(ul);
+  return sec;
+}
+
 /* --------------------------------------------------------------- напої -- */
 function renderDrinks(mount) {
   DRINK_ORDER.forEach(secKey => {
@@ -230,46 +261,45 @@ function renderDrinks(mount) {
 
   WINE_ORDER.forEach(secKey => {
     const items = WINES.filter(w => w.section === secKey);
+    if (items.length) mount.appendChild(wineSection(secKey, items, WINE_SERVE[secKey]));
+  });
+}
+
+/* ------------------------------------------------------------ десерти -- */
+function renderDesserts(mount) {
+  DESSERT_ORDER.forEach(secKey => {
+    const items = secKey === 'desserts'
+      ? DISHES.filter(d => d.section === 'desserts')
+      : DRINKS.filter(d => d.section === secKey);
     if (!items.length) return;
-    const sec = el('section', 'section');
-    sec.id = 's-' + secKey;
-    sec.appendChild(el('h2', null, esc(t('sec.' + secKey, LANG))));
-    sec.appendChild(el('p', 'section-en', `${esc(I18N['sec.' + secKey].en)} · ${WINE_SERVE[secKey]}`));
-    sec.appendChild(el('p', 'section-note', esc(t('note.wines', LANG))));
-    const ul = el('ul', 'winelist');
-    items.forEach(w => {
-      const li = el('li');
-      li.dataset.allergens = 'sulphites';
-      li.dataset.maybe = '';
-      li.dataset.search = (w.name + ' ' + w.region).toLowerCase();
-      const info = el('div');
-      info.innerHTML = `<span class="wname">${esc(w.name)}</span><br>
-        <span class="wregion">${esc(w.region)}</span>`;
-      info.appendChild(tagList({}, ['sulphites'], false));
-      li.appendChild(info);
-      li.appendChild(el('span', 'wprice', esc(w.price)));
-      ul.appendChild(li);
-    });
-    sec.appendChild(ul);
+    const sec = sectionBlock(secKey, SECTION_HINTS[secKey]);
+    const grid = el('div', 'grid');
+    items.forEach(d => grid.appendChild(dishCard(d)));
+    sec.appendChild(grid);
     mount.appendChild(sec);
+  });
+
+  DESSERT_WINE_ORDER.forEach(secKey => {
+    const items = DESSERT_WINES.filter(w => w.section === secKey);
+    if (items.length) mount.appendChild(wineSection(secKey, items, ''));
   });
 }
 
 /* ---------------------------------------------------- матриця алергенів -- */
 function renderMatrix(mount) {
   const groups = [];
-  MENU_ORDER.brunch.forEach(k => {
-    const items = DISHES.filter(d => d.section === k);
-    if (items.length) groups.push({ key: k, items });
-  });
-  ['canapes'].forEach(k => {
-    const items = DISHES.filter(d => d.section === k);
-    if (items.length) groups.push({ key: k, items });
-  });
-  DRINK_ORDER.forEach(k => {
-    const items = DRINKS.filter(d => d.section === k);
-    if (items.length) groups.push({ key: k, items });
-  });
+  const seen = new Set();
+  const add = (k, pool) => {
+    if (seen.has(k)) return;
+    const items = pool.filter(d => d.section === k);
+    if (!items.length) return;
+    seen.add(k);
+    groups.push({ key: k, items });
+  };
+  MENU_ORDER.brunch.forEach(k => add(k, DISHES));
+  add('canapes', DISHES);
+  DRINK_ORDER.forEach(k => add(k, DRINKS));
+  DESSERT_ORDER.forEach(k => add(k, k === 'desserts' ? DISHES : DRINKS));
 
   const scroll = el('div', 'table-scroll');
   const table = el('table', 'matrix');
@@ -356,6 +386,41 @@ function buildToolbar(mount, opts) {
   wrap.append(search, toggle, count);
   bar.appendChild(wrap);
 
+  // рядок розділів — гортається вбік, замінює довге прокручування сторінки
+  const sections = [...document.querySelectorAll('.section')].filter(sec => sec.id.startsWith('s-'));
+  let activeSection = 'all';
+  let tabs = null;
+  if (sections.length > 1) {
+    const tabsWrap = el('div', 'wrap');
+    tabs = el('nav', 'tabs');
+    tabs.setAttribute('aria-label', t('tabs.label', LANG));
+    const mk = (key, label) => {
+      const b = el('button', 'tab' + (key === 'all' ? ' on' : ''), esc(label));
+      b.type = 'button';
+      b.dataset.section = key;
+      b.addEventListener('click', () => {
+        activeSection = key;
+        tabs.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x.dataset.section === key));
+        b.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+        apply();
+        if (key !== 'all') {
+          const target = document.getElementById('s-' + key);
+          if (target) window.scrollTo({ top: Math.max(0, target.offsetTop - bar.offsetHeight - 12), behavior: 'smooth' });
+        }
+      });
+      tabs.appendChild(b);
+    };
+    mk('all', t('tabs.all', LANG));
+    sections.forEach(sec => {
+      const key = sec.id.slice(2);
+      const h2 = sec.querySelector('h2');
+      const en = sec.querySelector('.section-en');
+      mk(key, (h2 ? h2.textContent : en ? en.textContent : key));
+    });
+    tabsWrap.appendChild(tabs);
+    bar.appendChild(tabsWrap);
+  }
+
   const filtersWrap = el('div', 'wrap');
   const filters = el('div', 'filters');
   filters.appendChild(el('p', 'hint', esc(t('tb.hint', LANG))));
@@ -398,8 +463,11 @@ function buildToolbar(mount, opts) {
     document.querySelectorAll('.section').forEach(sec => {
       const nodes = sec.querySelectorAll('.dish, .winelist li');
       if (!nodes.length) return;
-      sec.style.display = [...nodes].some(n => n.style.display !== 'none') ? '' : 'none';
+      const inTab = activeSection === 'all' || sec.id === 's-' + activeSection;
+      sec.style.display = inTab && [...nodes].some(n => n.style.display !== 'none') ? '' : 'none';
     });
+    const setmenu = document.getElementById('setmenu');
+    if (setmenu) setmenu.style.display = activeSection === 'all' ? '' : 'none';
 
     document.querySelectorAll('table.matrix tbody tr').forEach(tr => {
       if (tr.dataset.search) return;
@@ -415,7 +483,13 @@ function buildToolbar(mount, opts) {
       : '';
   };
 
-  search.addEventListener('input', apply);
+  search.addEventListener('input', () => {
+    if (search.value.trim() && activeSection !== 'all' && tabs) {
+      activeSection = 'all';
+      tabs.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x.dataset.section === 'all'));
+    }
+    apply();
+  });
   chips.addEventListener('change', apply);
   clear.addEventListener('click', () => {
     chips.querySelectorAll('input').forEach(i => (i.checked = false));
@@ -498,7 +572,7 @@ function renderPage() {
   document.querySelectorAll('.langbtn').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG));
   document.querySelectorAll('.themebtn').forEach(b => (b.textContent = t('theme.' + b.dataset.theme, LANG)));
 
-  ['menu', 'setmenu', 'drinks', 'matrix', 'legend', 'toolbar', 'canapes'].forEach(id => {
+  ['menu', 'setmenu', 'drinks', 'matrix', 'legend', 'toolbar', 'canapes', 'desserts'].forEach(id => {
     const n = document.getElementById(id);
     if (n) n.innerHTML = '';
   });
@@ -509,6 +583,9 @@ function renderPage() {
     buildToolbar(document.getElementById('toolbar'), {});
   } else if (PAGE.kind === 'drinks') {
     renderDrinks(document.getElementById('drinks'));
+    buildToolbar(document.getElementById('toolbar'), { searchKey: 'tb.searchDrinks' });
+  } else if (PAGE.kind === 'desserts') {
+    renderDesserts(document.getElementById('desserts'));
     buildToolbar(document.getElementById('toolbar'), { searchKey: 'tb.searchDrinks' });
   } else if (PAGE.kind === 'canapes') {
     renderCanapes(document.getElementById('canapes'));
@@ -528,6 +605,9 @@ function renderPage() {
     set('dinner', `${n('dinner')} ${t('count.items', LANG)}`);
     set('drinks', `${DRINKS.length + WINES.length} ${t('count.items', LANG)}`);
     set('canapes', `${n('canapes')} ${t('count.items', LANG)}`);
+    set('desserts', `${DISHES.filter(x => x.section === 'desserts').length
+      + DRINKS.filter(x => ['dessertcocktails', 'teacoffee'].includes(x.section)).length
+      + DESSERT_WINES.length} ${t('count.items', LANG)}`);
     set('all', `${DISHES.length + DRINKS.length} ${t('count.inTable', LANG)}`);
   }
 }

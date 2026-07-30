@@ -600,6 +600,89 @@ const I18N = {
   'sec.side-salads':     { uk: 'Салати-гарніри', en: 'Side Salads', es: 'Ensaladas de acompañamiento', it: 'Insalate di contorno', de: 'Beilagensalate', ru: 'Салаты-гарниры' },
   'sec.desserts':        { uk: 'Десерти', en: 'Desserts', es: 'Postres', it: 'Dolci', de: 'Desserts', ru: 'Десерты' },
 
+  'sec.dessertwine': { uk: 'Десертні вина', en: 'Dessert Wine', es: 'Vinos de postre', it: 'Vini da dessert', de: 'Dessertweine', ru: 'Десертные вина' },
+  'sec.port':        { uk: 'Портвейни', en: 'Port', es: 'Oporto', it: 'Porto', de: 'Portwein', ru: 'Портвейны' },
+  'sec.sherry':      { uk: 'Херес', en: 'Sherry', es: 'Jerez', it: 'Sherry', de: 'Sherry', ru: 'Херес' },
+  'sec.teacoffee':   { uk: 'Чай і кава', en: 'Tea & Coffee', es: 'Té y café', it: 'Tè e caffè', de: 'Tee & Kaffee', ru: 'Чай и кофе' },
+
+  'sec.cognac':        { uk: 'Коньяк', en: 'Cognac', es: 'Coñac', it: 'Cognac', de: 'Cognac', ru: 'Коньяк' },
+  'sec.brandy':        { uk: 'Бренді', en: 'Brandy', es: 'Brandy', it: 'Brandy', de: 'Brandy', ru: 'Бренди' },
+  'sec.liqueurs':      { uk: 'Лікери', en: 'Liqueurs', es: 'Licores', it: 'Liquori', de: 'Liköre', ru: 'Ликёры' },
+  'sec.rum':           { uk: 'Ром', en: 'Rum', es: 'Ron', it: 'Rum', de: 'Rum', ru: 'Ром' },
+  'sec.bourbon':       { uk: 'Бурбон і житній віскі', en: 'Bourbon & Rye', es: 'Bourbon y centeno', it: 'Bourbon e rye', de: 'Bourbon & Rye', ru: 'Бурбон и ржаной виски' },
+  'sec.irishwhiskey':  { uk: 'Ірландський віскі', en: 'Irish Whiskey', es: 'Whiskey irlandés', it: 'Whiskey irlandese', de: 'Irish Whiskey', ru: 'Ирландский виски' },
+  'sec.blendedscotch': { uk: 'Купажований скотч', en: 'Blended Scotch Whisky', es: 'Whisky escocés de mezcla', it: 'Scotch blended', de: 'Blended Scotch', ru: 'Купажированный скотч' },
+  'sec.malt-highland': { uk: 'Односолодовий: Highlands і Speyside', en: 'Single Malt — Highlands & Speyside', es: 'Single malt: Highlands y Speyside', it: 'Single malt: Highlands e Speyside', de: 'Single Malt — Highlands & Speyside', ru: 'Односолодовый: Highlands и Speyside' },
+  'sec.malt-islay':    { uk: 'Односолодовий: Lowlands і Islay', en: 'Single Malt — Lowlands & Islay', es: 'Single malt: Lowlands e Islay', it: 'Single malt: Lowlands e Islay', de: 'Single Malt — Lowlands & Islay', ru: 'Односолодовый: Lowlands и Islay' },
+  'sec.japanese':      { uk: 'Японський віскі', en: 'Japanese Whisky', es: 'Whisky japonés', it: 'Whisky giapponese', de: 'Japanischer Whisky', ru: 'Японский виски' },
+
+  'note.spirits': {
+    uk: 'Дегустаційні описи — з друкованого меню, тому англійською. Зернові дистиляти (віскі, бурбон, житній) позначені як «може містити глютен»: після дистиляції він зазвичай не виявляється, але за целіакії краще уточнити.',
+    en: 'The tasting notes are taken verbatim from the printed menu. Grain spirits — whisky, bourbon, rye — are flagged “may contain gluten”: it is usually undetectable after distillation, but do check if you have coeliac disease.',
+    es: 'Las notas de cata proceden literalmente de la carta impresa. Los destilados de cereal (whisky, bourbon, centeno) se marcan como «puede contener gluten»: tras la destilación suele ser indetectable, pero consúltelo si es celíaco.',
+    it: 'Le note di degustazione sono riprese testualmente dal menu stampato. I distillati di cereali (whisky, bourbon, rye) sono segnalati come «può contenere glutine»: dopo la distillazione è di norma non rilevabile, ma in caso di celiachia chiedete conferma.',
+    de: 'Die Tasting Notes stammen wörtlich aus der gedruckten Karte. Getreidedestillate — Whisky, Bourbon, Rye — sind als „kann Gluten enthalten“ markiert: nach der Destillation ist es meist nicht nachweisbar, bei Zöliakie bitte nachfragen.',
+    ru: 'Дегустационные описания взяты дословно из печатного меню. Зерновые дистилляты (виски, бурбон, ржаной) помечены как «может содержать глютен»: после дистилляции он обычно не определяется, но при целиакии лучше уточнить.'
+  },
+  'note.teacoffee': {
+    uk: 'Кавові коктейлі містять вершки. Молоко до чаю та кави подають окремо.',
+    en: 'The coffee cocktails contain cream. Milk for tea and coffee is served separately.',
+    es: 'Los cócteles de café llevan nata. La leche para el té y el café se sirve aparte.',
+    it: 'I cocktail al caffè contengono panna. Il latte per tè e caffè è servito a parte.',
+    de: 'Die Kaffeecocktails enthalten Sahne. Milch zu Tee und Kaffee wird separat serviert.',
+    ru: 'Кофейные коктейли содержат сливки. Молоко к чаю и кофе подают отдельно.'
+  },
+
+  'warn.distilled': {
+    uk: 'Зерновий дистилят. Після дистиляції глютен зазвичай не виявляється, але за целіакії краще уточнити.',
+    en: 'A grain distillate. Gluten is usually undetectable after distillation, but do check if you have coeliac disease.',
+    es: 'Destilado de cereal. Tras la destilación el gluten suele ser indetectable, pero consúltelo si es celíaco.',
+    it: 'Distillato di cereali. Dopo la distillazione il glutine è di norma non rilevabile, ma in caso di celiachia chiedete conferma.',
+    de: 'Ein Getreidedestillat. Nach der Destillation ist Gluten meist nicht nachweisbar — bei Zöliakie bitte nachfragen.',
+    ru: 'Зерновой дистиллят. После дистилляции глютен обычно не определяется, но при целиакии лучше уточнить.'
+  },
+  'warn.amaretto': {
+    uk: 'Основа — абрикосова кісточка, не мигдаль, але смак марципановий. За горіхової алергії уточніть у бармена.',
+    en: 'Made from apricot kernels rather than almonds, though it tastes of marzipan. With a nut allergy, please check with the bar.',
+    es: 'Se elabora con huesos de albaricoque, no con almendras, aunque sabe a mazapán. Con alergia a frutos secos, consúltelo en la barra.',
+    it: 'È a base di armelline di albicocca, non di mandorle, pur avendo un gusto di marzapane. In caso di allergia alla frutta a guscio, chiedete al bar.',
+    de: 'Basis sind Aprikosenkerne, keine Mandeln — der Geschmack erinnert dennoch an Marzipan. Bei Nussallergie bitte an der Bar nachfragen.',
+    ru: 'Основа — абрикосовая косточка, а не миндаль, хотя вкус марципановый. При ореховой аллергии уточните у бармена.'
+  },
+
+  'nav.desserts': { uk: 'Десерти', en: 'Desserts', es: 'Postres', it: 'Dolci', de: 'Desserts', ru: 'Десерты' },
+  'page.desserts.lead': {
+    uk: 'Десертна карта: солодке від кондитерів, десертні коктейлі, десертні вина, портвейни, херес, чай і кава.',
+    en: 'The dessert card: puddings from the pastry team, dessert cocktails, dessert wines, port, sherry, tea and coffee.',
+    es: 'La carta de postres: dulces del obrador, cócteles de postre, vinos dulces, oporto, jerez, té y café.',
+    it: 'La carta dei dolci: dessert della pasticceria, cocktail da dessert, vini dolci, porto, sherry, tè e caffè.',
+    de: 'Die Dessertkarte: Süßes aus der Patisserie, Dessert-Cocktails, Dessertweine, Portwein, Sherry, Tee und Kaffee.',
+    ru: 'Десертная карта: сладкое от кондитеров, десертные коктейли, десертные вина, портвейны, херес, чай и кофе.'
+  },
+  'card.desserts': {
+    uk: 'Десерти, десертні коктейлі й вина, портвейни, херес, чай і кава.',
+    en: 'Puddings, dessert cocktails and wines, port, sherry, tea and coffee.',
+    es: 'Postres, cócteles y vinos dulces, oporto, jerez, té y café.',
+    it: 'Dolci, cocktail e vini da dessert, porto, sherry, tè e caffè.',
+    de: 'Desserts, Dessert-Cocktails und -Weine, Portwein, Sherry, Tee und Kaffee.',
+    ru: 'Десерты, десертные коктейли и вина, портвейны, херес, чай и кофе.'
+  },
+  'card.drinksSpirits': {
+    uk: 'Коктейлі, вина за келихом, а також коньяк, ром, віскі та лікери.',
+    en: 'Cocktails, wines by the glass, plus cognac, rum, whisky and liqueurs.',
+    es: 'Cócteles, vinos por copa y además coñac, ron, whisky y licores.',
+    it: 'Cocktail, vini al bicchiere e inoltre cognac, rum, whisky e liquori.',
+    de: 'Cocktails, Weine im Glas sowie Cognac, Rum, Whisky und Liköre.',
+    ru: 'Коктейли, вина по бокалам, а также коньяк, ром, виски и ликёры.'
+  },
+
+  /* ------------------------------------------------------ section tabs --- */
+  'tabs.all': { uk: 'Усе', en: 'All', es: 'Todo', it: 'Tutto', de: 'Alle', ru: 'Всё' },
+  'tabs.label': {
+    uk: 'Розділи меню', en: 'Menu sections', es: 'Secciones de la carta',
+    it: 'Sezioni del menu', de: 'Menüabschnitte', ru: 'Разделы меню'
+  },
+
   'sec.cocktails':   { uk: 'Коктейлі', en: 'Cocktails', es: 'Cócteles', it: 'Cocktail', de: 'Cocktails', ru: 'Коктейли' },
   'sec.bloodymarys': { uk: 'Bloody Marys', en: 'Bloody Marys', es: 'Bloody Marys', it: 'Bloody Mary', de: 'Bloody Marys', ru: 'Bloody Marys' },
   'sec.virgin':      { uk: 'Безалкогольні коктейлі', en: 'Virgin Cocktails', es: 'Cócteles sin alcohol', it: 'Cocktail analcolici', de: 'Alkoholfreie Cocktails', ru: 'Безалкогольные коктейли' },

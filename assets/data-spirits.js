@@ -1,0 +1,167 @@
+/* ==========================================================================
+   DIGESTIFS — коньяк, бренді, лікери, ром, віскі
+   Назви й дегустаційні описи — з друкованого меню, тому англійською.
+   Алергени: зерновий дистилят проходить дистиляцію, тому глютен позначено
+   як «може містити» — так само, як це робить офіційний лист ресторану.
+   ========================================================================== */
+
+const SPIRITS = [
+
+  /* ---------------------------------------------------------- COGNAC ---- */
+  { id: 'sp-hennessy-xo', section: 'cognac', price: '42.00', name: 'Hennessy XO',
+    desc: 'Deep and complex; dried fruit, spice, chocolate, exceptional length.',
+    a: [], m: [] },
+  { id: 'sp-frapin', section: 'cognac', price: '17.00', name: 'Frapin VSOP',
+    desc: 'Grande Champagne cognac; floral and fresh, with a clean, elegant finish.',
+    a: [], m: [] },
+  { id: 'sp-martell-vsop', section: 'cognac', price: '16.00', name: 'Martell VSOP',
+    desc: 'Fresh and floral; the accessible entry into cognac.',
+    a: [], m: [] },
+  { id: 'sp-martell-cb', section: 'cognac', price: '36.00', name: 'Martell Cordon Bleu',
+    desc: 'Classic steakhouse digestif; dried fruit, spice, long oaked finish.',
+    a: [], m: [] },
+  { id: 'sp-paradis', section: 'cognac', price: '365.00', name: 'Hennessy Paradis Impérial',
+    desc: "Rare blend of eaux de vie, some aged decades; the house's most exclusive cognac.",
+    a: [], m: [] },
+
+  /* ---------------------------------------------------------- BRANDY ---- */
+  { id: 'sp-grappa', section: 'brandy', price: '15.00', name: 'Grappa di Moscato, Tosalini',
+    desc: 'Distilled from Moscato pomace; grape blossom, white pepper, aromatic finish.',
+    a: [], m: [] },
+  { id: 'sp-calvados', section: 'brandy', price: '14.00', name: 'Avallen Calvados',
+    desc: 'Single estate, organic apples; crisp apple, pear, light vanilla.',
+    a: [], m: [] },
+  { id: 'sp-armagnac', section: 'brandy', price: '15.00', name: 'Baron de Sigognac VSOP Armagnac',
+    desc: 'Aged in Gascon black oak; prune, dried fig, rustic spice.',
+    a: [], m: [] },
+
+  /* -------------------------------------------------------- LIQUEURS ---- */
+  { id: 'sp-disaronno', section: 'liqueurs', price: '10.00', name: 'Disaronno Amaretto',
+    desc: 'Apricot kernel base; marzipan sweetness, vanilla, smooth finish.',
+    a: [], m: ['nuts'], w: ['warn.amaretto'] },
+  { id: 'sp-baileys', section: 'liqueurs', price: '10.00', name: 'Baileys Irish Cream',
+    desc: 'Irish whiskey and fresh cream; cocoa, vanilla, malt.',
+    a: ['milk'], m: ['gluten'], g: ['barley'] },
+  { id: 'sp-frangelico', section: 'liqueurs', price: '10.00', name: 'Frangelico',
+    desc: 'Toasted hazelnut and cacao; nutty, gently sweet.',
+    a: ['nuts'], m: [], n: { nuts: 'hazelnut' } },
+  { id: 'sp-limoncello', section: 'liqueurs', price: '10.00', name: 'Limoncello',
+    desc: 'Sorrento lemon zest infusion; bright citrus, sugar, chilled serve.',
+    a: [], m: [] },
+  { id: 'sp-sambuca', section: 'liqueurs', price: '11.00', name: 'Ramazzotti Sambuca White',
+    desc: 'Star anise base; liquorice sweetness, herbal finish.',
+    a: [], m: [] },
+
+  /* ------------------------------------------------------------- RUM ---- */
+  { id: 'sp-zacapa23', section: 'rum', price: '18.00', name: 'Ron Zacapa 23',
+    desc: 'Solera aged above two thousand three hundred metres; honey, dried fig, dark chocolate, vanilla.',
+    a: [], m: [] },
+  { id: 'sp-diplomatico', section: 'rum', price: '15.00', name: 'Diplomático Reserva',
+    desc: 'Blend of pot and column still rums; toffee, orange peel, cocoa.',
+    a: [], m: [] },
+  { id: 'sp-zacapa-xo', section: 'rum', price: '34.00', name: 'Ron Zacapa XO',
+    desc: 'Solera blend finished in cognac casks; dried fruit, cocoa, gentle oak spice.',
+    a: [], m: [] },
+  { id: 'sp-maximo', section: 'rum', price: '340.00', name: 'Havana Club Máximo',
+    desc: 'Extra aged Cuban rum; dried fruit, cocoa, tobacco leaf, long finish.',
+    a: [], m: [] },
+
+  /* -------------------------------------------------- BOURBON & RYE ----- */
+  { id: 'sp-woodford', section: 'bourbon', price: '13.00', name: 'Woodford Reserve',
+    desc: 'Triple distilled; vanilla, dried fruit, baking spice, a hint of citrus.',
+    a: [], m: ['gluten'], g: ['wheat', 'rye', 'barley'] },
+  { id: 'sp-makers', section: 'bourbon', price: '13.00', name: "Maker's Mark",
+    desc: 'Wheated mash bill; caramel, soft wheat sweetness, vanilla.',
+    a: [], m: ['gluten'], g: ['wheat', 'barley'] },
+  { id: 'sp-woodford-do', section: 'bourbon', price: '17.00', name: 'Woodford Reserve Double Oaked',
+    desc: 'Second maturation in a heavily toasted barrel; toffee, dark chocolate, deeper oak.',
+    a: [], m: ['gluten'], g: ['wheat', 'rye', 'barley'] },
+  { id: 'sp-blantons', section: 'bourbon', price: '19.00', name: "Blanton's Original",
+    desc: 'Single barrel; caramel, citrus zest, oak, long finish.',
+    a: [], m: ['gluten'], g: ['rye', 'barley'] },
+  { id: 'sp-eagle-rare', section: 'bourbon', price: '17.00', name: 'Eagle Rare 10 Year Old',
+    desc: 'Single barrel bourbon; leather, toffee, dry oak, cocoa.',
+    a: [], m: ['gluten'], g: ['rye', 'barley'] },
+  { id: 'sp-makers46', section: 'bourbon', price: '17.00', name: "Maker's 46",
+    desc: 'Finished with seared French oak staves; vanilla, spice, deeper caramel.',
+    a: [], m: ['gluten'], g: ['wheat', 'barley'] },
+  { id: 'sp-eh-taylor', section: 'bourbon', price: '34.00', name: 'Colonel E.H. Taylor Small Batch',
+    desc: 'Bottled in bond; vanilla, oak, dried fruit, a mineral edge.',
+    a: [], m: ['gluten'], g: ['rye', 'barley'] },
+  { id: 'sp-knob-rye', section: 'bourbon', price: '13.00', name: 'Knob Creek Rye',
+    desc: 'One hundred proof rye; black pepper, caramel, oak char.',
+    a: [], m: ['gluten'], g: ['rye', 'barley'] },
+
+  /* -------------------------------------------------- IRISH WHISKEY ----- */
+  { id: 'sp-bushmills10', section: 'irishwhiskey', price: '17.00', name: 'Bushmills 10 Year Old',
+    desc: 'Triple distilled in copper pot stills, matured in bourbon and sherry casks; malted apple, honey, gentle spice.',
+    a: [], m: ['gluten'], g: ['barley'] },
+  { id: 'sp-green-spot', section: 'irishwhiskey', price: '16.00', name: 'Green Spot',
+    desc: 'Single pot still, matured across bourbon, sherry and Marsala casks; green apple, barley spice, toasted oak.',
+    a: [], m: ['gluten'], g: ['barley'] },
+  { id: 'sp-jameson-bb', section: 'irishwhiskey', price: '15.00', name: 'Jameson Black Barrel',
+    desc: 'Double charred barrels; toffee, dried fruit, vanilla, a touch of char.',
+    a: [], m: ['gluten'], g: ['barley'] },
+  { id: 'sp-redbreast', section: 'irishwhiskey', price: '16.00', name: 'Redbreast',
+    desc: 'Single pot still, matured in oloroso sherry casks; dried fruit, baking spice, creamy oak.',
+    a: [], m: ['gluten'], g: ['barley'] },
+
+  /* ------------------------------------------- BLENDED SCOTCH WHISKY ---- */
+  { id: 'sp-chivas18', section: 'blendedscotch', price: '25.00', name: 'Chivas Regal 18 Year Old',
+    desc: 'Blended across twenty malt and grain whiskies; honey, dark chocolate, orchard fruit, gentle smoke.',
+    a: [], m: ['gluten'], g: ['barley', 'wheat'] },
+  { id: 'sp-jw-black', section: 'blendedscotch', price: '16.00', name: 'Johnnie Walker Black Label',
+    desc: 'Twelve year blend; dried fruit, vanilla, a whisper of peat smoke.',
+    a: [], m: ['gluten'], g: ['barley', 'wheat'] },
+  { id: 'sp-jw-blue', section: 'blendedscotch', price: '92.00', name: 'Johnnie Walker Blue Label',
+    desc: 'Rare cask blend of aged malts and grains; honeyed smoke, dried fruit, remarkable smoothness.',
+    a: [], m: ['gluten'], g: ['barley', 'wheat'] },
+
+  /* ------------------------------ SINGLE MALT — HIGHLANDS & SPEYSIDE ---- */
+  { id: 'sp-oban14', section: 'malt-highland', price: '19.00', name: 'Oban 14 Year Old',
+    desc: 'Coastal Highland malt; sea salt, orange peel, honey, a trace of smoke.',
+    a: [], m: ['gluten'], g: ['barley'] },
+  { id: 'sp-dalmore-king', section: 'malt-highland', price: '52.00', name: 'Dalmore King Alexander III',
+    desc: 'Finished across six casks including Matusalem sherry and port; dark chocolate, dried fruit, marzipan, spice.',
+    a: [], m: ['gluten'], g: ['barley'] },
+  { id: 'sp-dalmore12', section: 'malt-highland', price: '19.00', name: 'Dalmore 12 Year Old',
+    desc: 'Matured in bourbon then finished in Matusalem oloroso sherry; orange marmalade, chocolate, cinnamon.',
+    a: [], m: ['gluten'], g: ['barley'] },
+  { id: 'sp-talisker10', section: 'malt-highland', price: '14.00', name: 'Talisker 10 Year Old',
+    desc: 'Distilled on Skye; black pepper, sea spray, bonfire smoke, a warming finish.',
+    a: [], m: ['gluten'], g: ['barley'] },
+  { id: 'sp-balvenie12', section: 'malt-highland', price: '17.00', name: 'Balvenie 12 Year Old DoubleWood',
+    desc: 'Two cask matured; honey, vanilla, dried fruit, food friendly.',
+    a: [], m: ['gluten'], g: ['barley'] },
+  { id: 'sp-glenfiddich15', section: 'malt-highland', price: '16.00', name: 'Glenfiddich 15 Year Old',
+    desc: "The world's best known single malt; pear, oak, gentle spice.",
+    a: [], m: ['gluten'], g: ['barley'] },
+
+  /* --------------------------------------- SINGLE MALT — LOWLANDS & ISLAY */
+  { id: 'sp-auchentoshan', section: 'malt-islay', price: '17.00', name: 'Auchentoshan Three Wood',
+    desc: 'Triple cask matured in bourbon, oloroso and Pedro Ximenez sherry; dried fruit, toffee, gentle spice, unpeated.',
+    a: [], m: ['gluten'], g: ['barley'] },
+  { id: 'sp-lagavulin16', section: 'malt-islay', price: '21.00', name: 'Lagavulin 16 Year Old',
+    desc: 'Slow distilled, heavily peated; bonfire smoke, iodine, dried fruit sweetness.',
+    a: [], m: ['gluten'], g: ['barley'] },
+  { id: 'sp-laphroaig10', section: 'malt-islay', price: '16.00', name: 'Laphroaig 10 Year Old',
+    desc: 'Peat dried malt over open fires; medicinal smoke, seaweed, brine.',
+    a: [], m: ['gluten'], g: ['barley'] },
+  { id: 'sp-ardbeg', section: 'malt-islay', price: '20.00', name: 'Ardbeg Uigeadail',
+    desc: 'Sherry cask and bourbon cask vatted; peat smoke against raisin and treacle sweetness.',
+    a: [], m: ['gluten'], g: ['barley'] },
+
+  /* -------------------------------------------------- JAPANESE WHISKY --- */
+  { id: 'sp-hibiki', section: 'japanese', price: '28.00', name: 'Hibiki Harmony',
+    desc: 'Blended from malt and grain whiskies aged in five cask types; honey, orange peel, light oak spice.',
+    a: [], m: ['gluten'], g: ['barley', 'wheat'] },
+  { id: 'sp-nikka', section: 'japanese', price: '22.00', name: 'Nikka From The Barrel',
+    desc: 'Cask strength blend; dried orange, caramel, baking spice, a bold finish.',
+    a: [], m: ['gluten'], g: ['barley', 'wheat'] },
+  { id: 'sp-fuji', section: 'japanese', price: '17.00', name: 'Fuji Single Grain',
+    desc: 'Column distilled grain whisky; vanilla, coconut, soft spice, light body.',
+    a: [], m: ['gluten'], g: ['wheat'] }
+];
+
+const SPIRIT_ORDER = ['cognac', 'brandy', 'liqueurs', 'rum', 'bourbon', 'irishwhiskey',
+                      'blendedscotch', 'malt-highland', 'malt-islay', 'japanese'];

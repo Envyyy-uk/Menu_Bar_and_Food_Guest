@@ -200,6 +200,26 @@ a { color: inherit; }
 .filter-toggle:hover { border-color: var(--accent); color: var(--accent); }
 .filter-toggle[aria-expanded="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 
+/* ---------------------------------------------------------- розділи --- */
+.tabs {
+  display: flex; gap: 6px; margin-top: 11px; padding-bottom: 4px;
+  overflow-x: auto; scrollbar-width: thin;
+  scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
+}
+.tabs::-webkit-scrollbar { height: 4px; }
+.tabs::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 4px; }
+.tab {
+  font: inherit; font-size: 13.5px; cursor: pointer; white-space: nowrap;
+  padding: 7px 15px; border-radius: 999px; scroll-snap-align: center;
+  border: 1px solid var(--rule); background: var(--paper-2); color: var(--ink-soft);
+  flex: 0 0 auto;
+}
+.tab:hover { border-color: var(--accent); color: var(--accent); }
+.tab.on {
+  background: var(--accent); border-color: var(--accent);
+  color: var(--accent-ink); font-weight: 600;
+}
+
 .filters { display: none; padding: 4px 0 14px; }
 .filters.open { display: block; }
 .filters .hint { font-size: 13.5px; color: var(--ink-faint); margin: 0 0 10px; }

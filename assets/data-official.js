@@ -207,47 +207,31 @@ const CANAPES = [
    4. Десертні коктейлі — алергени з офіційного листа
    ------------------------------------------------------------------------- */
 const DESSERT_COCKTAILS = [
-  { id: 'dc-black-rye', section: 'dessertcocktails', src: 'dcocktails', price: '', g: ['rye'],
-    name: 'Black & Rye',
-    ing: [['~Rye', ['rye-whiskey']], 'lemon-juice', 'sugar', 'egg-white'],
-    a: ['gluten', 'eggs'], m: [], r: ['eggs'], w: ['warn.rawEggWhite'] },
-
-  { id: 'dc-espresso-martini', section: 'dessertcocktails', src: 'dcocktails', price: '',
+  { id: 'dc-espresso-martini', section: 'dessertcocktails', src: 'dcocktails', price: '16.75',
     name: 'Espresso Martini',
-    ing: ['vodka', 'espresso', 'coffee-liqueur', 'sugar'],
+    desc: 'Sapling vodka, Coffee Liqueur, espresso and little sugar vigorously shaken',
+    ing: [['~Sapling', ['vodka']], 'coffee-liqueur', 'espresso', 'sugar'],
     a: [], m: [], r: [], noAllergens: true },
 
-  { id: 'dc-golden-cadillac', section: 'dessertcocktails', src: 'dcocktails', price: '',
-    n: { nuts: 'almonds' },
-    name: 'Golden Cadillac',
-    ing: ['galliano', 'creme-de-cacao', 'cream'],
-    a: ['milk'], m: ['nuts'], r: [] },
+  { id: 'dc-black-rye', section: 'dessertcocktails', src: 'dcocktails', price: '18.75', g: ['rye'],
+    name: 'Black & Rye',
+    desc: "Rabbit Hole Boxergrail Rye, Chambord black raspberry liqueur, lemon juice, a little honey and Abbot's bitters. Shaken with egg white",
+    ing: [['~Rabbit Hole Boxergrail', ['rye-whiskey']], ['~Chambord', ['raspberry-liqueur']],
+          'lemon-juice', 'honey', 'bitters', 'egg-white'],
+    a: ['gluten', 'eggs'], m: [], r: ['eggs'], w: ['warn.rawEggWhite'] },
 
-  { id: 'dc-irish-coffee', section: 'dessertcocktails', src: 'dcocktails', price: '', g: ['barley', 'rye', 'wheat'],
-    name: 'Irish Coffee',
-    ing: ['irish-whiskey', 'coffee', 'sugar', 'whipped-cream'],
-    a: ['milk'], m: ['gluten'], r: [] },
-
-  { id: 'dc-irish-cream-coffee', section: 'dessertcocktails', src: 'dcocktails', price: '', g: ['barley', 'rye', 'wheat'],
-    name: 'Irish Cream Coffee',
-    ing: ['irish-cream', 'coffee', 'whipped-cream'],
-    a: ['milk'], m: ['gluten'], r: [] },
-
-  { id: 'dc-kentucky-coffee', section: 'dessertcocktails', src: 'dcocktails', price: '', g: ['barley', 'rye', 'wheat'],
-    name: 'Kentucky Coffee',
-    ing: ['bourbon', 'coffee', 'sugar', 'whipped-cream'],
-    a: ['milk'], m: ['gluten'], r: [] },
-
-  { id: 'dc-lemon-flip', section: 'dessertcocktails', src: 'dcocktails', price: '',
+  { id: 'dc-lemon-flip', section: 'dessertcocktails', src: 'dcocktails', price: '16.75',
     name: 'Lemon Flip',
-    ing: ['lemon-juice', 'sugar', 'egg'],
+    desc: 'Sipsmith Lemon Drizzle gin, limoncello, lemon juice, sugar and a whole egg',
+    ing: [['~Sipsmith Lemon Drizzle', ['gin']], 'limoncello', 'lemon-juice', 'sugar', 'egg'],
     a: ['eggs'], m: [], r: [], w: ['warn.rawEggWhite'] },
 
-  { id: 'dc-nutty-irish-coffee', section: 'dessertcocktails', src: 'dcocktails', price: '', g: ['barley', 'rye', 'wheat'],
-    n: { nuts: 'hazelnut' },
-    name: 'Nutty Irish Coffee',
-    ing: ['irish-whiskey', 'hazelnut-liqueur', 'coffee', 'whipped-cream'],
-    a: ['milk', 'nuts'], m: ['gluten'], r: [] }
+  { id: 'dc-golden-cadillac', section: 'dessertcocktails', src: 'dcocktails', price: '16.75',
+    n: { nuts: 'almonds' },
+    name: 'Golden Cadillac',
+    desc: 'Crème de Cacao Blanc, Galliano liqueur, orange juice and double cream',
+    ing: ['creme-de-cacao', 'galliano', 'orange-juice', 'double-cream'],
+    a: ['milk'], m: ['nuts'], r: [] }
 ];
 
 /* -------------------------------------------------------------------------
