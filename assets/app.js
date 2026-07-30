@@ -676,4 +676,11 @@ function initPage(config) {
   renderPage();
   // сторінка сама перемикається на межі години — перезавантажувати не треба
   setInterval(applySchedule, 30000);
+
+  // якщо колись зʼявиться бекенд — стан почне приходити звідти й оновлюватись
+  // без перезавантаження; поки API_BASE порожній, це нічого не робить
+  if (API_BASE) {
+    fetchOverrides().then(ok => { if (ok) applySchedule(); });
+    setInterval(() => fetchOverrides().then(ok => { if (ok) applySchedule(); }), API_POLL_MS);
+  }
 }

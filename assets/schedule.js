@@ -12,6 +12,23 @@
 
 const RESTAURANT_TZ = 'Europe/London';
 
+/* -------------------------------------------------------------------------
+   Місце для майбутнього бекенду.
+
+   Поки порожньо — сайт живе на статичному overrides.js і нічого не запитує.
+   Щойно зʼявиться сервер, достатньо вписати сюди базу — і стан почне
+   приходити звідти, а адмін-панель буде зберігати туди ж. Більше нічого
+   в проєкті міняти не треба.
+
+   Контракт:
+     GET  {API_BASE}/overrides  → 200 { updated, schedules, rules }
+     PUT  {API_BASE}/overrides  → 204, тіло те саме, потрібна авторизація
+   ------------------------------------------------------------------------- */
+const API_BASE = '';                 // напр. 'https://menu.example.com/api'
+const API_POLL_MS = 60000;           // як часто перепитувати стан
+
+let REMOTE_OVERRIDES = null;         // заповнюється, якщо сервер відповів
+
 /* Дні: 0 = неділя … 6 = субота */
 const SCHEDULES = {
   // Години, надруковані на самих меню:
@@ -76,16 +93,34 @@ function adminDraft() {
   } catch (e) { return null; }
 }
 
+/* Пріоритет: статичний файл < сервер < локальна чернетка адміна */
 function effectiveOverrides() {
-  const draft = adminDraft();
   const base = typeof OVERRIDES === 'object' ? OVERRIDES : { schedules: {}, rules: {} };
-  if (!draft) return base;
-  return {
-    updated: draft.updated || base.updated,
-    schedules: Object.assign({}, base.schedules, draft.schedules),
-    rules: Object.assign({}, base.rules, draft.rules),
-    local: true
-  };
+  const layers = [base, REMOTE_OVERRIDES].filter(Boolean);
+  const draft = adminDraft();
+  if (draft) layers.push(draft);
+  const out = { updated: '', schedules: {}, rules: {}, local: !!draft };
+  layers.forEach(l => {
+    out.updated = l.updated || out.updated;
+    Object.assign(out.schedules, l.schedules || {});
+    Object.assign(out.rules, l.rules || {});
+  });
+  return out;
+}
+
+/** Забрати стан із сервера. Без API_BASE — тиха заглушка. */
+async function fetchOverrides() {
+  if (!API_BASE) return false;
+  try {
+    const r = await fetch(API_BASE + '/overrides', { cache: 'no-store' });
+    if (!r.ok) return false;
+    const data = await r.json();
+    if (!data || typeof data !== 'object') return false;
+    REMOTE_OVERRIDES = data;
+    return true;
+  } catch (e) {
+    return false;                    // сервер лежить — лишаємось на статиці
+  }
 }
 
 /** Усі розклади: вбудовані + додані панеллю */

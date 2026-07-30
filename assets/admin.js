@@ -257,6 +257,7 @@ const OVERRIDES = ${JSON.stringify(clean, null, 2)};
 
 function initAdmin() {
   load();
+  if (API_BASE) fetchOverrides().then(ok => { if (ok) render(); });
 
   document.querySelectorAll('.atab').forEach(b =>
     b.addEventListener('click', () => { tab = b.dataset.tab; render(); }));
@@ -264,7 +265,29 @@ function initAdmin() {
   const search = document.getElementById('asearch');
   search.addEventListener('input', () => { filter = search.value; render(); });
 
-  document.getElementById('export').addEventListener('click', () => {
+  const exportBtn = document.getElementById('export');
+  if (API_BASE) exportBtn.textContent = 'Опублікувати на сервері';
+
+  exportBtn.addEventListener('click', async () => {
+    // З бекендом — публікуємо одразу. Без нього — віддаємо файл на заміну.
+    if (API_BASE) {
+      exportBtn.disabled = true;
+      try {
+        const r = await fetch(API_BASE + '/overrides', {
+          method: 'PUT',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ updated: draft.updated, schedules: draft.schedules, rules: draft.rules })
+        });
+        exportBtn.textContent = r.ok ? 'Опубліковано ✓' : `Помилка ${r.status}`;
+        if (r.ok) { try { localStorage.removeItem('sw-overrides'); } catch (e) { /* ignore */ } }
+      } catch (e) {
+        exportBtn.textContent = 'Сервер недоступний';
+      }
+      exportBtn.disabled = false;
+      setTimeout(() => (exportBtn.textContent = 'Опублікувати на сервері'), 2500);
+      return;
+    }
     const blob = new Blob([buildFile()], { type: 'text/javascript' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
