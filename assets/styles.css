@@ -84,6 +84,20 @@ a { color: inherit; }
 .nav a:hover { border-color: rgba(217,192,122,.5); }
 .nav a[aria-current="page"] { background: var(--gold); color: #1b1205; font-weight: 600; }
 
+/* ------------------------------------------------------ language switch --- */
+.langswitch {
+  display: flex; gap: 2px; margin-left: 14px; padding: 3px;
+  border: 1px solid rgba(217,192,122,.35); border-radius: 999px;
+}
+.langbtn {
+  font: inherit; font-size: 12px; letter-spacing: .09em; font-weight: 600;
+  cursor: pointer; padding: 5px 9px; border-radius: 999px;
+  border: none; background: none; color: #c4bda8;
+}
+.langbtn:hover { color: #f2ead6; background: rgba(255,255,255,.07); }
+.langbtn.on { background: var(--gold-soft); color: #1b1205; }
+@media (prefers-color-scheme: dark) { .langbtn.on { color: #0b120f; background: var(--gold); } }
+
 /* --------------------------------------------------------------- hero --- */
 .hero { padding: 56px 0 40px; text-align: center; }
 .hero h1 {
@@ -116,6 +130,8 @@ a { color: inherit; }
 .card h2 { margin: 10px 0 8px; font-size: 25px; font-weight: 500; }
 .card p { margin: 0; color: var(--ink-soft); font-size: 15px; }
 .card .count { margin-top: 14px; font-size: 13px; color: var(--ink-faint); }
+.card h2.small { font-size: 19px; margin-top: 0; }
+.legend-key { margin: 14px 0 0; font-size: 14px; color: var(--ink-faint); }
 .card.accent { background: var(--green); color: #f0e9d8; border-color: var(--green-2); }
 .card.accent p { color: #c3ccc4; }
 .card.accent .count { color: #97a49c; }

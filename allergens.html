@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Алергени — Smith &amp; Wollensky</title>
+<title>Allergens — Smith &amp; Wollensky</title>
 <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
@@ -12,15 +12,15 @@
   <div class="wrap">
     <a class="brand" href="index.html">
       <b>Smith &amp; Wollensky</b>
-      <span>Menu &amp; Bar Guide</span>
+      <span data-i18n="brand.sub"></span>
     </a>
     <nav class="nav">
-      <a href="index.html">Головна</a>
-      <a href="brunch.html">Brunch</a>
-      <a href="lunch.html">Lunch</a>
-      <a href="dinner.html">Dinner</a>
-      <a href="drinks.html">Напої</a>
-      <a href="allergens.html" aria-current="page">Алергени</a>
+      <a href="index.html" data-i18n="nav.home"></a>
+      <a href="brunch.html" data-i18n="nav.brunch"></a>
+      <a href="lunch.html" data-i18n="nav.lunch"></a>
+      <a href="dinner.html" data-i18n="nav.dinner"></a>
+      <a href="drinks.html" data-i18n="nav.drinks"></a>
+      <a href="allergens.html" aria-current="page" data-i18n="nav.allergens"></a>
     </nav>
   </div>
 </header>
@@ -29,86 +29,58 @@
 
 <main class="wrap">
   <section class="hero">
-    <h1>Алергени</h1>
+    <h1 data-i18n="page.allergens.title"></h1>
     <div class="rule"></div>
-    <p>Зведена таблиця: усі страви та напої × 14 обов’язкових алергенів.
-       <span class="mark-yes">●</span> — містить &nbsp;·&nbsp; <span class="mark-maybe">○</span> — може містити.</p>
+    <p data-i18n="page.allergens.lead"></p>
+    <p class="legend-key">
+      <span class="mark-yes">●</span> <span data-i18n="legend.contains"></span>
+      &nbsp;·&nbsp;
+      <span class="mark-maybe">○</span> <span data-i18n="legend.may"></span>
+    </p>
   </section>
 
-  <div class="notice">
-    <b>Статус документа.</b> Це робоча реконструкція складу за описами в меню й типовими
-    рецептурами, а не офіційна декларація алергенів ресторану. Використовуй її як шпаргалку
-    для швидкої орієнтації, але остаточну відповідь гостю давай лише після звірки з кухнею
-    та офіційним allergen-листом. Позиції, де алергенів не заявлено, все одно готуються
-    на спільному обладнанні.
-  </div>
+  <div class="notice" data-i18n="notice.allergens"></div>
 
   <section class="section">
-    <h2>14 алергенів</h2>
-    <p class="section-en">Довідка · цифри = «містить / може містити»</p>
+    <h2 data-i18n="legend.title"></h2>
+    <p class="section-en" data-i18n="legend.sub"></p>
     <div id="legend"></div>
   </section>
 
   <section class="section">
-    <h2>Повна матриця</h2>
-    <p class="section-en">Усі позиції меню та бару</p>
-    <p class="section-note">Наведи курсор на назву алергена у шапці, щоб побачити повну назву.
-       Таблиця прокручується вбік; перша колонка зафіксована.</p>
+    <h2 data-i18n="matrix.title"></h2>
+    <p class="section-en" data-i18n="matrix.sub"></p>
+    <p class="section-note" data-i18n="matrix.note"></p>
     <div id="matrix"></div>
   </section>
 
   <section class="section">
-    <h2>Практичні застереження</h2>
-    <p class="section-en">Що варто пам’ятати щоразу</p>
+    <h2 data-i18n="tips.title"></h2>
+    <p class="section-en" data-i18n="tips.sub"></p>
     <div class="cards">
-      <div class="card">
-        <h2 style="font-size:19px">Вустерський соус = риба</h2>
-        <p>Анчоуси є у соусі «Цезар», тартарі, коктейльному соусі та всіх Bloody Marys.
-           Гостю з алергією на рибу ці позиції не підходять.</p>
-      </div>
-      <div class="card">
-        <h2 style="font-size:19px">Соус XO = ракоподібні + молюски</h2>
-        <p>Сушені креветки та в’ялений гребінець. Він у Chilli &amp; Garlic Shrimp
-           і в броколіні — гарнір, який виглядає «просто овочевим», але таким не є.</p>
-      </div>
-      <div class="card">
-        <h2 style="font-size:19px">Спільний фритюр</h2>
-        <p>Картопля фрі, cajun fries, хеш-браун і цибулеві кільця смажаться поруч із
-           паніруванням — для суворої безглютенової дієти це ризик.</p>
-      </div>
-      <div class="card">
-        <h2 style="font-size:19px">Стейк ≠ «без алергенів»</h2>
-        <p>Саме м’ясо чисте, але стейки часто фінішують вершковим маслом, а соуси й
-           доповнення додають молоко, яйця та сульфіти. Уточнюй спосіб приготування.</p>
-      </div>
-      <div class="card">
-        <h2 style="font-size:19px">Місо містить злаки</h2>
-        <p>Глазур на брукві до каре ягняти — це соя, і майже завжди ще ячмінь або рис.</p>
-      </div>
-      <div class="card">
-        <h2 style="font-size:19px">Сирі позиції</h2>
-        <p>Тартар, карпачо, татакі з лосося та устриці подаються сирими або майже сирими —
-           окремо попереджай вагітних, дітей і людей зі зниженим імунітетом.</p>
-      </div>
+      <div class="card"><h2 class="small" data-i18n="tip.1.t"></h2><p data-i18n="tip.1.d"></p></div>
+      <div class="card"><h2 class="small" data-i18n="tip.2.t"></h2><p data-i18n="tip.2.d"></p></div>
+      <div class="card"><h2 class="small" data-i18n="tip.3.t"></h2><p data-i18n="tip.3.d"></p></div>
+      <div class="card"><h2 class="small" data-i18n="tip.4.t"></h2><p data-i18n="tip.4.d"></p></div>
+      <div class="card"><h2 class="small" data-i18n="tip.5.t"></h2><p data-i18n="tip.5.d"></p></div>
+      <div class="card"><h2 class="small" data-i18n="tip.6.t"></h2><p data-i18n="tip.6.d"></p></div>
     </div>
   </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <span><a href="index.html">← До всіх меню</a></span>
-    <span>Ціни у фунтах, включають ПДВ. Може додаватися 15% сервісного збору.</span>
+    <span><a href="index.html" data-i18n="footer.back"></a></span>
+    <span data-i18n="footer.prices"></span>
   </div>
 </footer>
 
+<script src="assets/i18n.js"></script>
+<script src="assets/lexicon.js"></script>
 <script src="assets/allergens.js"></script>
 <script src="assets/data-food.js"></script>
 <script src="assets/data-drinks.js"></script>
 <script src="assets/app.js"></script>
-<script>
-  renderLegend(document.getElementById('legend'));
-  renderMatrix(document.getElementById('matrix'));
-  buildToolbar(document.getElementById('toolbar'), { placeholder: 'Пошук позиції у таблиці…' });
-</script>
+<script>initPage({ kind: 'allergens' });</script>
 </body>
 </html>
