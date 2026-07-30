@@ -569,39 +569,53 @@ function buildSwitches() {
 function applySchedule() {
   const now = restaurantNow();
 
-  // банер, коли час підмінено через ?at=
   document.querySelectorAll('.preview-banner').forEach(n => n.remove());
   if (now.preview) {
-    const b = el('div', 'preview-banner', `${esc(t('sched.preview', LANG))}: ${esc(now.preview)}`);
-    document.body.prepend(b);
+    document.body.prepend(el('div', 'preview-banner',
+      `${esc(t('sched.preview', LANG))}: ${esc(now.preview)}`));
   }
 
-  const mark = (node, cfg) => {
-    if (!node || !cfg) return;
+  const mark = (node, scope, id) => {
+    if (!node) return;
     node.querySelectorAll(':scope > .sched-note').forEach(n => n.remove());
-    const open = isServingNow(cfg.key, now);
-    node.classList.toggle('scheduled-off', !open);
-    node.style.display = (!open && cfg.mode === 'hide') ? 'none' : '';
-    if (!open && cfg.mode !== 'hide') {
-      node.prepend(el('p', 'sched-note',
-        `<b>${esc(t('sched.closed', LANG))}.</b> ${esc(t('sched.servedAt', LANG))} ${esc(describeSchedule(cfg.key, LANG))}`));
-    }
+    const st = statusOf(scope, id, now);
+    node.classList.toggle('scheduled-off', !st.open);
+    node.style.display = (!st.open && st.rule && st.rule.mode === 'hide') ? 'none' : '';
+    if (st.open || (st.rule && st.rule.mode === 'hide')) return;
+    const text = st.closedManually
+      ? `<b>${esc(t('sched.soldOut', LANG))}</b>`
+      : `<b>${esc(t('sched.closed', LANG))}.</b> ${esc(t('sched.servedAt', LANG))} ` +
+        `${esc(describeSchedule(st.rule.schedule, LANG))}`;
+    node.prepend(el('p', 'sched-note', text));
   };
 
-  Object.entries(SCHEDULE_OF.dish).forEach(([id, cfg]) => mark(document.getElementById('d-' + id), cfg));
-  Object.entries(SCHEDULE_OF.section).forEach(([key, cfg]) => mark(document.getElementById('s-' + key), cfg));
-  if (PAGE && PAGE.menu) mark(document.querySelector('.setmenu'), SCHEDULE_OF.setmenu[PAGE.menu]);
+  DISHES.concat(DRINKS).forEach(d => {
+    const node = document.getElementById('d-' + d.id);
+    if (node) mark(node, 'dish', d.id);
+  });
+  document.querySelectorAll('.section[id^="s-"]').forEach(sec => mark(sec, 'section', sec.id.slice(2)));
+  if (PAGE && PAGE.menu) mark(document.querySelector('.setmenu'), 'setmenu', PAGE.menu);
 
-  const pageCfg = PAGE && SCHEDULE_OF.page[PAGE.menu || PAGE.kind];
-  if (pageCfg) {
+  // ціла сторінка — банером під загальним нагадуванням
+  document.querySelectorAll('.page-sched').forEach(n => n.remove());
+  const pageId = PAGE && (PAGE.menu || PAGE.kind);
+  const pageStatus = pageId ? statusOf('page', pageId, now) : { open: true };
+  if (!pageStatus.open && pageStatus.rule) {
     const host = document.querySelector('main .notice');
-    const open = isServingNow(pageCfg.key, now);
-    document.querySelectorAll('.page-sched').forEach(n => n.remove());
-    if (!open && host) {
-      host.after(el('div', 'notice page-sched',
-        `<b>${esc(t('sched.closed', LANG))}.</b> ${esc(t('sched.pageClosed', LANG))} ` +
-        `${esc(t('sched.servedAt', LANG))} ${esc(describeSchedule(pageCfg.key, LANG))}`));
+    const body = pageStatus.closedManually
+      ? esc(t('sched.soldOut', LANG))
+      : `${esc(t('sched.pageClosed', LANG))} ${esc(t('sched.servedAt', LANG))} ` +
+        `${esc(describeSchedule(pageStatus.rule.schedule, LANG))}`;
+    if (host) host.after(el('div', 'notice page-sched', `<b>${esc(t('sched.closed', LANG))}.</b> ${body}`));
+    if (pageStatus.rule.mode === 'hide') {
+      document.querySelectorAll('main .section, main .setmenu').forEach(n => (n.style.display = 'none'));
     }
+  }
+
+  // сповіщення, що діє незбережена чернетка панелі
+  document.querySelectorAll('.draft-banner').forEach(n => n.remove());
+  if (effectiveOverrides().local) {
+    document.body.prepend(el('div', 'preview-banner draft-banner', esc(t('sched.draft', LANG))));
   }
 }
 

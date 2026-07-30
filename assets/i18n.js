@@ -697,6 +697,18 @@ const I18N = {
     de: 'Diese Karte wird derzeit nicht serviert. Unten steht die vollständige Liste mit den Zeiten.',
     ru: 'Это меню сейчас не подаётся. Ниже — полный перечень с расписанием.'
   },
+  'sched.soldOut': {
+    uk: 'Наразі немає', en: 'Currently unavailable', es: 'No disponible ahora',
+    it: 'Al momento non disponibile', de: 'Zurzeit nicht verfügbar', ru: 'Сейчас нет в наличии'
+  },
+  'sched.draft': {
+    uk: 'Діє незбережена чернетка адмін-панелі — гості її не бачать',
+    en: 'An unsaved admin draft is active — guests do not see it',
+    es: 'Hay un borrador de administración activo: los clientes no lo ven',
+    it: 'È attiva una bozza dell’amministrazione: gli ospiti non la vedono',
+    de: 'Ein ungespeicherter Admin-Entwurf ist aktiv — Gäste sehen ihn nicht',
+    ru: 'Действует несохранённый черновик админ-панели — гости его не видят'
+  },
   'sched.preview': {
     uk: 'Режим перегляду часу', en: 'Time preview mode', es: 'Modo de vista previa horaria',
     it: 'Modalità anteprima orario', de: 'Zeit-Vorschaumodus', ru: 'Режим предпросмотра времени'

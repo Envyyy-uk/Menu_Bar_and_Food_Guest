@@ -64,9 +64,47 @@ const toMinutes = hhmm => {
   return h * 60 + m;
 };
 
+/* -------------------------------------------------------------------------
+   Злиття: базові розклади + те, що зберегла адмін-панель.
+   Чернетка в localStorage діє лише в браузері адміна; для гостей працює
+   те, що лежить у overrides.js.
+   ------------------------------------------------------------------------- */
+function adminDraft() {
+  try {
+    const raw = localStorage.getItem('sw-overrides');
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+
+function effectiveOverrides() {
+  const draft = adminDraft();
+  const base = typeof OVERRIDES === 'object' ? OVERRIDES : { schedules: {}, rules: {} };
+  if (!draft) return base;
+  return {
+    updated: draft.updated || base.updated,
+    schedules: Object.assign({}, base.schedules, draft.schedules),
+    rules: Object.assign({}, base.rules, draft.rules),
+    local: true
+  };
+}
+
+/** Усі розклади: вбудовані + додані панеллю */
+function allSchedules() {
+  return Object.assign({}, SCHEDULES, effectiveOverrides().schedules);
+}
+
+/** Правило для конкретного елемента: 'dish:sunday-roast', 'page:brunch' … */
+function ruleFor(scope, id) {
+  const ov = effectiveOverrides().rules[scope + ':' + id];
+  if (ov) return ov;
+  const legacy = SCHEDULE_OF[scope] && SCHEDULE_OF[scope][id];
+  if (legacy) return { state: 'auto', schedule: legacy.key, mode: legacy.mode || 'dim' };
+  return null;
+}
+
 /** Чи діє розклад просто зараз */
 function isServingNow(scheduleKey, now) {
-  const ranges = SCHEDULES[scheduleKey];
+  const ranges = allSchedules()[scheduleKey];
   if (!ranges) return true;                       // немає розкладу — доступно завжди
   return ranges.some(r => {
     const from = toMinutes(r.from), to = toMinutes(r.to);
@@ -80,7 +118,7 @@ function isServingNow(scheduleKey, now) {
 
 /** Людський опис розкладу обраною мовою: «Пн, Нд 12:00–22:00 · Вт–Сб 12:00–17:30» */
 function describeSchedule(scheduleKey, lang) {
-  const ranges = SCHEDULES[scheduleKey];
+  const ranges = allSchedules()[scheduleKey];
   if (!ranges) return '';
   const names = t('sched.days', lang).split(',');
   return ranges.map(r => {
@@ -99,4 +137,16 @@ function describeSchedule(scheduleKey, lang) {
       : run.map(d => names[d]).join(', ')).join(', ');
     return `${days} ${r.from}–${r.to}`;
   }).join(' · ');
+}
+
+/* -------------------------------------------------------------------------
+   Підсумковий стан елемента
+   ------------------------------------------------------------------------- */
+function statusOf(scope, id, now) {
+  const rule = ruleFor(scope, id);
+  if (!rule) return { open: true, rule: null };
+  if (rule.state === 'off') return { open: false, closedManually: true, rule };
+  if (rule.state === 'on') return { open: true, rule };
+  if (!rule.schedule) return { open: true, rule };
+  return { open: isServingNow(rule.schedule, now), rule };
 }
