@@ -75,7 +75,20 @@
 
 * { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  /* прибирає зум по подвійному тапу, лишаючи пінч і прокрутку */
+  touch-action: manipulation;
+}
+
+/* У режимі застосунку інтерфейс не має поводитись як вебсторінка:
+   ні виділення тексту від довгого тиску, ні підсвітки тапу. */
+.pwa button, .pwa .tab, .pwa .chip, .pwa .atab, .pwa .sbtn,
+.pwa .dbtn, .pwa .mbtn, .pwa .langbtn, .pwa .themebtn, .pwa .nav a, .pwa summary {
+  -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
 
 body {
   margin: 0;
