@@ -577,6 +577,34 @@ function buildSwitches() {
 
 
 /* ---------------------------------------------------- розклад подачі --- */
+
+/**
+ * Чому саме зачинено — одним рядком. «Скоро» має три відтінки: з датою
+ * відкриття, з годинами подачі, і просто «готуємо».
+ */
+function closedText(st, forPage) {
+  if (st.soon) {
+    const head = `<b>${esc(t('sched.soonHead', LANG))}.</b> `;
+    if (st.until) {
+      return head + `${esc(t('sched.soonFrom', LANG))} ${esc(formatUntil(st.until, LANG))}`;
+    }
+    if (st.rule && st.rule.schedule) {
+      return head + `${esc(t('sched.servedAt', LANG))} ` +
+        `${esc(describeSchedule(st.rule.schedule, LANG))}`;
+    }
+    return head + esc(t('sched.soon', LANG));
+  }
+  if (st.closedManually) {
+    return forPage
+      ? `<b>${esc(t('sched.closed', LANG))}.</b> ${esc(t('sched.soldOut', LANG))}`
+      : `<b>${esc(t('sched.soldOut', LANG))}</b>`;
+  }
+  const hours = `${esc(t('sched.servedAt', LANG))} ${esc(describeSchedule(st.rule.schedule, LANG))}`;
+  return forPage
+    ? `<b>${esc(t('sched.pageClosed', LANG))}</b> ${hours}`
+    : `<b>${esc(t('sched.closed', LANG))}.</b> ${hours}`;
+}
+
 function applySchedule() {
   const now = restaurantNow();
 
@@ -593,11 +621,7 @@ function applySchedule() {
     node.classList.toggle('scheduled-off', !st.open);
     node.style.display = (!st.open && st.rule && st.rule.mode === 'hide') ? 'none' : '';
     if (st.open || (st.rule && st.rule.mode === 'hide')) return;
-    const text = st.closedManually
-      ? `<b>${esc(t(st.soon ? 'sched.soon' : 'sched.soldOut', LANG))}</b>`
-      : `<b>${esc(t('sched.closed', LANG))}.</b> ${esc(t('sched.servedAt', LANG))} ` +
-        `${esc(describeSchedule(st.rule.schedule, LANG))}`;
-    node.prepend(el('p', 'sched-note', text));
+    node.prepend(el('p', 'sched-note', closedText(st)));
   };
 
   DISHES.concat(DRINKS).forEach(d => {
@@ -613,12 +637,7 @@ function applySchedule() {
   const pageStatus = pageId ? statusOf('page', pageId, now) : { open: true };
   if (!pageStatus.open && pageStatus.rule) {
     const host = document.querySelector('main .notice');
-    const body = pageStatus.closedManually
-      ? esc(t(pageStatus.soon ? 'sched.soon' : 'sched.soldOut', LANG))
-      : `${esc(t('sched.pageClosed', LANG))} ${esc(t('sched.servedAt', LANG))} ` +
-        `${esc(describeSchedule(pageStatus.rule.schedule, LANG))}`;
-    const head = t(pageStatus.soon ? 'sched.soonHead' : 'sched.closed', LANG);
-    if (host) host.after(el('div', 'notice page-sched', `<b>${esc(head)}.</b> ${body}`));
+    if (host) host.after(el('div', 'notice page-sched', closedText(pageStatus, true)));
     // 'hide' — ховаємо вміст; 'dim' — лишаємо читабельним, але явно приглушеним,
     // інакше закрита сторінка виглядає точно так само, як відкрита
     document.querySelectorAll('main .section, main .setmenu').forEach(n => {

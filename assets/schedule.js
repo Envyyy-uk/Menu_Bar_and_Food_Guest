@@ -86,14 +86,40 @@ function restaurantNow() {
   const override = new URLSearchParams(location.search).get('at');
   if (override) {
     const d = new Date(override);
-    if (!isNaN(d)) return { day: d.getDay(), minutes: d.getHours() * 60 + d.getMinutes(), preview: override };
+    if (!isNaN(d)) {
+      return {
+        day: d.getDay(), minutes: d.getHours() * 60 + d.getMinutes(),
+        stamp: override.slice(0, 16), preview: override
+      };
+    }
   }
   const parts = Object.fromEntries(
-    new Intl.DateTimeFormat('en-GB', {
-      timeZone: RESTAURANT_TZ, weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false
+    new Intl.DateTimeFormat('en-CA', {
+      timeZone: RESTAURANT_TZ, weekday: 'short',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
     }).formatToParts(new Date()).map(p => [p.type, p.value])
   );
-  return { day: DAY_INDEX[parts.weekday], minutes: (+parts.hour) * 60 + (+parts.minute), preview: null };
+  return {
+    day: DAY_INDEX[parts.weekday],
+    minutes: (+parts.hour) * 60 + (+parts.minute),
+    // «YYYY-MM-DDTHH:MM» у поясі ресторану — такі рядки можна порівнювати
+    // як текст, без Date і без сюрпризів із часовими поясами
+    stamp: `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`,
+    preview: null
+  };
+}
+
+/** Дата відкриття людською мовою: «15 серпня, 12:00» */
+function formatUntil(stamp, lang) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(stamp || '');
+  if (!m) return stamp || '';
+  // збираємо в UTC і форматуємо в UTC — інакше пояс пристрою зсуне дату
+  const d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]));
+  return new Intl.DateTimeFormat(lang, {
+    day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit',
+    hourCycle: 'h23', timeZone: 'UTC'
+  }).format(d);
 }
 
 const toMinutes = hhmm => {
@@ -244,8 +270,20 @@ function statusOf(scope, id, now) {
   const rule = ruleFor(scope, id);
   if (!rule) return { open: true, rule: null };
   // 'soon' — те саме закриття, але з іншою обіцянкою: не «немає», а «буде»
-  if (rule.state === 'off' || rule.state === 'soon') {
-    return { open: false, closedManually: true, soon: rule.state === 'soon', rule };
+  if (rule.state === 'off') return { open: false, closedManually: true, rule };
+  if (rule.state === 'soon') {
+    // Дата відкриття має пріоритет: поки не настала — «Скоро, відкриється …».
+    // Щойно настала, позиція живе за розкладом, якщо він є, інакше просто
+    // відкрита — і панель більше чіпати не треба.
+    if (rule.until && now.stamp < rule.until) {
+      return { open: false, closedManually: true, soon: true, until: rule.until, rule };
+    }
+    if (rule.schedule) {
+      const on = isServingNow(rule.schedule, now);
+      return on ? { open: true, rule } : { open: false, soon: true, rule };
+    }
+    // без дати й без розкладу — «Скоро» без кінця, поки не знімуть вручну
+    return rule.until ? { open: true, rule } : { open: false, closedManually: true, soon: true, rule };
   }
   if (rule.state === 'on') return { open: true, rule };
   if (!rule.schedule) return { open: true, rule };

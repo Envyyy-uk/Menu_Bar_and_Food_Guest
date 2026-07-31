@@ -532,7 +532,7 @@ a.card .offbadge { position: absolute; top: 12px; right: 12px; margin: 0; }
 .sbtn.s-off.on { background: var(--danger); border-color: var(--danger); color: #fff; }
 .sbtn.s-soon.on { background: var(--gold); border-color: var(--gold); color: #241d0d; }
 .astatus .no.soon { color: var(--gold); }
-.asel, .sname, .stime {
+.asel, .sname, .stime, .auntil {
   font: inherit; font-size: 13px; padding: 6px 9px; border-radius: 8px;
   border: 1px solid var(--rule); background: var(--paper); color: var(--ink);
 }
@@ -578,7 +578,7 @@ a.card .offbadge { position: absolute; top: 12px; right: 12px; margin: 0; }
   .astates { width: 100%; }
   /* чотири стани в один рядок — «За розкладом» мусить мати право перенестись */
   .sbtn { flex: 1; padding: 11px 4px; font-size: 12.5px; white-space: normal; line-height: 1.2; }
-  .asel, .mbtn { width: 100%; padding: 11px 12px; }
+  .asel, .mbtn, .auntil { width: 100%; padding: 11px 12px; }
   .mbtn { text-align: center; }
   .dbtn { width: 40px; padding: 11px 0; font-size: 13px; }
   .stime { flex: 1; min-width: 110px; padding: 10px; }

@@ -79,8 +79,11 @@ function currentRule(scope, id) {
 
 function setRule(scope, id, patch) {
   const key = ruleKey(scope, id);
-  const next = Object.assign({ state: 'auto', schedule: '', mode: 'dim' }, currentRule(scope, id), patch);
+  const next = Object.assign({ state: 'auto', schedule: '', mode: 'dim', until: '' },
+    currentRule(scope, id), patch);
   delete next.inherited;
+  // дата відкриття має сенс лише для «Скоро» — щоб не тягнулася за станом
+  if (next.state !== 'soon' || !next.until) delete next.until;
   if (next.state === 'auto' && !next.schedule) delete draft.rules[key];
   else draft.rules[key] = next;
   persist();
@@ -90,12 +93,8 @@ function setRule(scope, id, patch) {
 function itemRow(item) {
   const rule = currentRule(item.scope, item.id);
   const now = restaurantNow();
-  const st = (function () {
-    if (rule.state === 'off') return { open: false, manual: true };
-    if (rule.state === 'soon') return { open: false, manual: true, soon: true };
-    if (rule.state === 'on' || !rule.schedule) return { open: true };
-    return { open: isServingNow(rule.schedule, now) };
-  })();
+  // логіку не дублюємо: панель має показувати рівно те, що побачить гість
+  const st = statusOf(item.scope, item.id, now);
 
   const row = ael('div', 'arow' + (st.open ? '' : ' closed'));
   row.appendChild(ael('div', 'aname',
@@ -112,7 +111,9 @@ function itemRow(item) {
   row.appendChild(states);
 
   const sel = ael('select', 'asel');
-  sel.disabled = rule.state !== 'auto';
+  // «Скоро» теж живе за розкладом: поза годинами воно просто інакше зветься.
+  // «Немає» лишається ручним — це 86 на сьогодні, розклад йому ні до чого.
+  sel.disabled = !['auto', 'soon'].includes(rule.state);
   const none = ael('option', null, aesc(t('adm.noSchedule', LANG)));
   none.value = '';
   sel.appendChild(none);
@@ -125,6 +126,18 @@ function itemRow(item) {
   sel.addEventListener('change', () => setRule(item.scope, item.id, { schedule: sel.value }));
   row.appendChild(sel);
 
+  // дата відкриття — лише для «Скоро»: настане, і позиція відкриється сама
+  if (rule.state === 'soon') {
+    const until = ael('input', 'auntil');
+    until.type = 'datetime-local';
+    until.value = rule.until || '';
+    until.title = t('adm.until', LANG);
+    until.setAttribute('aria-label', t('adm.until', LANG));
+    until.addEventListener('change', () =>
+      setRule(item.scope, item.id, { until: until.value.slice(0, 16) }));
+    row.appendChild(until);
+  }
+
   const mode = ael('button', 'mbtn', aesc(t(rule.mode === 'hide' ? 'adm.mode.hide' : 'adm.mode.dim', LANG)));
   mode.type = 'button';
   mode.title = t('adm.mode.title', LANG);
@@ -134,7 +147,7 @@ function itemRow(item) {
 
   const statusKey = st.open ? 'adm.status.open'
     : st.soon ? 'adm.status.soon'
-    : st.manual ? 'adm.status.off' : 'adm.status.offhours';
+    : st.closedManually ? 'adm.status.off' : 'adm.status.offhours';
   row.appendChild(ael('div', 'astatus', st.open
     ? `<span class="ok">${aesc(t(statusKey, LANG))}</span>`
     : `<span class="no${st.soon ? ' soon' : ''}">${aesc(t(statusKey, LANG))}</span>`));

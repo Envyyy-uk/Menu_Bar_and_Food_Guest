@@ -657,6 +657,14 @@ const I18N = {
   'adm.state.on':   { uk: 'Завжди', en: 'Always', es: 'Siempre', it: 'Sempre', de: 'Immer', ru: 'Всегда' },
   'adm.state.off':  { uk: 'Немає', en: 'Off', es: 'Agotado', it: 'Esaurito', de: 'Aus', ru: 'Нет' },
   'adm.state.soon': { uk: 'Скоро', en: 'Soon', es: 'Pronto', it: 'Presto', de: 'Bald', ru: 'Скоро' },
+  'adm.until': {
+    uk: 'Відкрити автоматично о (порожньо — без дати)',
+    en: 'Open automatically at (empty — no date)',
+    es: 'Abrir automáticamente el (vacío — sin fecha)',
+    it: 'Apri automaticamente il (vuoto — nessuna data)',
+    de: 'Automatisch öffnen am (leer — kein Datum)',
+    ru: 'Открыть автоматически в (пусто — без даты)'
+  },
 
   'adm.mode.dim':   { uk: 'Приглушити', en: 'Dim', es: 'Atenuar', it: 'Attenua', de: 'Abblenden', ru: 'Приглушить' },
   'adm.mode.hide':  { uk: 'Ховати', en: 'Hide', es: 'Ocultar', it: 'Nascondi', de: 'Ausblenden', ru: 'Скрывать' },
@@ -891,6 +899,10 @@ const I18N = {
   'sched.soonHead': {
     uk: 'Скоро', en: 'Coming soon', es: 'Muy pronto',
     it: 'Presto disponibile', de: 'Demnächst', ru: 'Скоро'
+  },
+  'sched.soonFrom': {
+    uk: 'Відкриється', en: 'Opens', es: 'Abre',
+    it: 'Apre', de: 'Öffnet', ru: 'Откроется'
   },
   'sched.soon': {
     uk: 'Готуємо — незабаром зʼявиться в меню.',
