@@ -90,6 +90,24 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Режим застосунку розкриває сторінку на весь екран (viewport-fit=cover),
+   тож шапка опиняється під годинником і батареєю. Відсуваємо весь вміст на
+   висоту вирізу, а саму смужку закриваємо темно-зеленим: статус-бар у нас
+   translucent, його текст завжди білий, і на світлій темі він би зник. */
+.pwa body { padding-top: env(safe-area-inset-top, 0px); }
+.pwa body::before {
+  content: ''; position: fixed; top: 0; left: 0; right: 0;
+  height: env(safe-area-inset-top, 0px);
+  background: var(--green); z-index: 60; pointer-events: none;
+}
+.pwa .wrap {
+  padding-left: calc(20px + env(safe-area-inset-left, 0px));
+  padding-right: calc(20px + env(safe-area-inset-right, 0px));
+}
+/* прилиплі смуги мають ставати під вирізом, а не під ним */
+.pwa .toolbar, .pwa .abar { top: env(safe-area-inset-top, 0px); }
+.pwa footer { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
 body {
   margin: 0;
   background: var(--paper);
@@ -378,15 +396,23 @@ table.matrix th.name, table.matrix td.name {
   background: var(--paper-2); z-index: 1;
 }
 table.matrix thead th.name { background: var(--green); z-index: 3; }
+/* повтор шапки під кожним розділом — щоб колонки читались і на середині списку */
+table.matrix tr.matrix-head-repeat th {
+  background: var(--green); color: #efe8d7;
+  font-size: 11px; letter-spacing: .05em; font-weight: 600;
+  border-top: 1px solid var(--gold-soft);
+}
+table.matrix tr.matrix-head-repeat th.name { z-index: 1; }
 table.matrix td.name small { display: block; color: var(--ink-faint); font-size: 12.5px; }
 table.matrix tbody tr:hover td { background: color-mix(in srgb, var(--accent) 10%, var(--paper-2)); }
 table.matrix tbody tr:hover td.name { background: color-mix(in srgb, var(--accent) 10%, var(--paper-2)); }
 .mark-yes { color: var(--danger); font-weight: 700; }
 .mark-maybe { color: var(--ink-faint); }
-.matrix-cat {
+table.matrix td.matrix-cat {
   background: color-mix(in srgb, var(--accent) 16%, var(--paper-2));
   font-weight: 600; text-align: left; letter-spacing: .1em; text-transform: uppercase; font-size: 11.5px;
 }
+.matrix-cat span { position: sticky; left: 12px; display: inline-block; }
 
 /* wine list */
 .winelist { list-style: none; margin: 0; padding: 0; }

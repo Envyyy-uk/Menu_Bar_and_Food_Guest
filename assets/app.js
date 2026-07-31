@@ -304,24 +304,35 @@ function renderMatrix(mount) {
   const scroll = el('div', 'table-scroll');
   const table = el('table', 'matrix');
 
+  // Шапка потрібна в кількох місцях: угорі таблиці й під кожним розділом.
+  // Прилипнути вона не може — горизонтальна прокрутка таблиці забирає в неї
+  // вертикальний контекст, тож на довгому списку іконки просто зникають.
+  const headRow = cls => {
+    const tr = el('tr', cls);
+    tr.appendChild(el('th', 'name', esc(t('matrix.item', LANG))));
+    ALLERGEN_KEYS.forEach(k => {
+      const th = el('th', null, `${ALLERGENS[k].icon}<br>${esc(aShort(k, LANG))}`);
+      th.title = aName(k, LANG);
+      tr.appendChild(th);
+    });
+    return tr;
+  };
+
   const thead = el('thead');
-  const hr = el('tr');
-  hr.appendChild(el('th', 'name', esc(t('matrix.item', LANG))));
-  ALLERGEN_KEYS.forEach(k => {
-    const th = el('th', null, `${ALLERGENS[k].icon}<br>${esc(aShort(k, LANG))}`);
-    th.title = aName(k, LANG);
-    hr.appendChild(th);
-  });
-  thead.appendChild(hr);
+  thead.appendChild(headRow(null));
   table.appendChild(thead);
 
   const tbody = el('tbody');
-  groups.forEach(group => {
+  groups.forEach((group, gi) => {
     const catRow = el('tr');
-    const td = el('td', 'matrix-cat', esc(t('sec.' + group.key, LANG)));
+    // назва в span, щоб її можна було прилипити до лівого краю: сама комірка
+    // розтягнута на всі 15 колонок і при боковій прокрутці їде за екран
+    const td = el('td', 'matrix-cat', `<span>${esc(t('sec.' + group.key, LANG))}</span>`);
     td.colSpan = ALLERGEN_KEYS.length + 1;
     catRow.appendChild(td);
     tbody.appendChild(catRow);
+    // у першого розділу шапка таблиці й так просто над ним
+    if (gi) tbody.appendChild(headRow('matrix-head-repeat'));
 
     group.items.forEach(d => {
       const tr = el('tr');
