@@ -874,6 +874,10 @@ const I18N = {
     de: 'Der Entwurf gilt nur unter dieser Adresse. Öffnen Sie die Karte über dieselbe, sonst sind die Änderungen unsichtbar:',
     ru: 'Черновик действует только по этому адресу. Меню нужно открывать с него же — иначе изменений не будет видно:'
   },
+  'ui.top': {
+    uk: 'Нагору', en: 'Back to top', es: 'Volver arriba',
+    it: 'Torna su', de: 'Nach oben', ru: 'Наверх'
+  },
   'sched.badge': {
     uk: 'Зачинено', en: 'Closed', es: 'Cerrado',
     it: 'Chiuso', de: 'Geschlossen', ru: 'Закрыто'

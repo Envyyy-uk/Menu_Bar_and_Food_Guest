@@ -352,6 +352,7 @@ function applyAdminI18n() {
   // опинитись за різними адресами — тоді чернетка «не працює» без жодної помилки
   const origin = document.getElementById('aorigin');
   if (origin) origin.textContent = location.origin + location.pathname.replace(/[^/]*$/, '');
+  labelTopButton(LANG);
   document.querySelectorAll('.langbtn').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG));
 }
 
@@ -381,6 +382,7 @@ function buildAdminLangSwitch() {
 function initAdmin() {
   load();
   buildAdminLangSwitch();
+  buildTopButton();
   applyAdminI18n();
   // панель теж могла завантажитись із кешу — звіряємось із опублікованим
   (API_BASE ? fetchOverrides() : refreshOverrides()).then(ok => {

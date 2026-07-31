@@ -647,6 +647,7 @@ let PAGE = null;
 
 function renderPage() {
   applyI18n();
+  labelTopButton(LANG);
   document.querySelectorAll('.langbtn').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG));
   document.querySelectorAll('.themebtn').forEach(b => (b.textContent = t('theme.' + b.dataset.theme, LANG)));
 
@@ -696,6 +697,7 @@ function initPage(config) {
   PAGE = config;
   applyTheme(getTheme());
   buildSwitches();
+  buildTopButton();
   renderPage();
   // сторінка сама перемикається на межі години — перезавантажувати не треба
   setInterval(applySchedule, 30000);

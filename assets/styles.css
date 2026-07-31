@@ -595,7 +595,25 @@ footer a { color: var(--gold-soft); }
   .nav { margin-left: 0; width: 100%; }
 }
 
+/* --------------------------------------------------------- кнопка вгору --- */
+.topbtn {
+  position: fixed; z-index: 40;
+  right: calc(16px + env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 1px solid var(--gold-soft);
+  background: var(--green); color: #f2ead6;
+  font-size: 22px; line-height: 1; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .28);
+  /* поки гортати нема куди — кнопки немає ні для ока, ні для табуляції */
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity .18s ease, transform .18s ease, visibility .18s;
+}
+.topbtn.on { opacity: .93; visibility: visible; transform: none; }
+.topbtn:hover, .topbtn:focus-visible { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .topbtn { transition: none; } }
+
 @media print {
-  .toolbar, .nav, footer, .filter-toggle { display: none; }
+  .toolbar, .nav, footer, .filter-toggle, .topbtn { display: none; }
   .dish, .card { break-inside: avoid; box-shadow: none; }
 }
