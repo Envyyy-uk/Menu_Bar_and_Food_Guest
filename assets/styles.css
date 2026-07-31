@@ -478,6 +478,11 @@ a.card .offbadge { position: absolute; top: 12px; right: 12px; margin: 0; }
   background: color-mix(in srgb, var(--paper) 94%, transparent);
   backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule);
 }
+.unpub {
+  margin: 0 0 12px; padding: 10px 14px; border-radius: var(--radius);
+  background: var(--warn-bg); border: 1px solid var(--gold);
+  border-left: 4px solid var(--gold); font-size: 14.5px; color: var(--ink);
+}
 .anote {
   background: var(--warn-bg); border: 1px solid var(--gold-soft);
   border-radius: var(--radius); padding: 4px 18px; margin: 0 0 20px; font-size: 14.5px;

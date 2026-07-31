@@ -815,6 +815,57 @@ const I18N = {
     uk: 'Наразі немає', en: 'Currently unavailable', es: 'No disponible ahora',
     it: 'Al momento non disponibile', de: 'Zurzeit nicht verfügbar', ru: 'Сейчас нет в наличии'
   },
+  'adm.unpublished': {
+    uk: 'Зміни ще не опубліковані. Гості бачать старе меню — натисніть «Опублікувати на GitHub».',
+    en: 'These changes are not published yet. Guests still see the old menu — press “Publish to GitHub”.',
+    es: 'Estos cambios aún no están publicados. Los clientes siguen viendo la carta anterior: pulse «Publicar en GitHub».',
+    it: 'Queste modifiche non sono ancora pubblicate. Gli ospiti vedono il menu precedente: premi «Pubblica su GitHub».',
+    de: 'Diese Änderungen sind noch nicht veröffentlicht. Gäste sehen die alte Karte — „Auf GitHub veröffentlichen“ drücken.',
+    ru: 'Изменения ещё не опубликованы. Гости видят старое меню — нажмите «Опубликовать на GitHub».'
+  },
+  'adm.unpublished.manual': {
+    uk: 'Зміни ще не опубліковані. Гості бачать старе меню — скопіюйте вміст і замініть assets/overrides.js у репозиторії.',
+    en: 'These changes are not published yet. Guests still see the old menu — copy the contents and replace assets/overrides.js in the repository.',
+    es: 'Estos cambios aún no están publicados. Copie el contenido y reemplace assets/overrides.js en el repositorio.',
+    it: 'Queste modifiche non sono ancora pubblicate. Copia il contenuto e sostituisci assets/overrides.js nel repository.',
+    de: 'Diese Änderungen sind noch nicht veröffentlicht. Inhalt kopieren und assets/overrides.js im Repository ersetzen.',
+    ru: 'Изменения ещё не опубликованы. Скопируйте содержимое и замените assets/overrides.js в репозитории.'
+  },
+  'adm.gh.publish': {
+    uk: 'Опублікувати на GitHub', en: 'Publish to GitHub', es: 'Publicar en GitHub',
+    it: 'Pubblica su GitHub', de: 'Auf GitHub veröffentlichen', ru: 'Опубликовать на GitHub'
+  },
+  'adm.gh.publishing': {
+    uk: 'Публікую…', en: 'Publishing…', es: 'Publicando…',
+    it: 'Pubblicazione…', de: 'Wird veröffentlicht…', ru: 'Публикую…'
+  },
+  'adm.gh.published': {
+    uk: 'Опубліковано · сайт оновиться за хвилину',
+    en: 'Published · the site updates within a minute',
+    es: 'Publicado · el sitio se actualiza en un minuto',
+    it: 'Pubblicato · il sito si aggiorna entro un minuto',
+    de: 'Veröffentlicht · die Seite aktualisiert sich in einer Minute',
+    ru: 'Опубликовано · сайт обновится за минуту'
+  },
+  'adm.gh.failed': {
+    uk: 'Не вдалося:', en: 'Failed:', es: 'Error:', it: 'Non riuscito:', de: 'Fehlgeschlagen:', ru: 'Не удалось:'
+  },
+  'adm.gh.token': {
+    uk: 'Додати токен GitHub', en: 'Add GitHub token', es: 'Añadir token de GitHub',
+    it: 'Aggiungi token GitHub', de: 'GitHub-Token hinzufügen', ru: 'Добавить токен GitHub'
+  },
+  'adm.gh.tokenSet': {
+    uk: 'Токен GitHub ✓', en: 'GitHub token ✓', es: 'Token de GitHub ✓',
+    it: 'Token GitHub ✓', de: 'GitHub-Token ✓', ru: 'Токен GitHub ✓'
+  },
+  'adm.gh.tokenPrompt': {
+    uk: 'Дрібнозернистий токен GitHub із правом Contents: Read and write лише на цей репозиторій. Зберігається тільки на цьому пристрої. Порожнє поле — стерти токен.',
+    en: 'A fine-grained GitHub token with Contents: Read and write on this repository only. Stored on this device only. Empty field clears it.',
+    es: 'Token de GitHub de permisos detallados con Contents: Read and write solo en este repositorio. Se guarda solo en este dispositivo. Vacío para borrarlo.',
+    it: 'Token GitHub fine-grained con Contents: Read and write solo su questo repository. Salvato solo su questo dispositivo. Vuoto per cancellarlo.',
+    de: 'Fein abgestuftes GitHub-Token mit Contents: Read and write nur für dieses Repository. Wird nur auf diesem Gerät gespeichert. Leer = löschen.',
+    ru: 'Мелкозернистый токен GitHub с правом Contents: Read and write только на этот репозиторий. Хранится только на этом устройстве. Пустое поле — стереть.'
+  },
   'adm.origin': {
     uk: 'Чернетка діє лише за цією адресою. Меню треба відкривати з неї ж — інакше змін не буде видно:',
     en: 'The draft only applies at this address. Open the menu from the same one, or the changes will not show:',

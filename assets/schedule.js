@@ -27,6 +27,26 @@ const RESTAURANT_TZ = 'Europe/London';
 const API_BASE = '';                 // напр. 'https://menu.example.com/api'
 const API_POLL_MS = 60000;           // як часто перепитувати стан
 
+/* -------------------------------------------------------------------------
+   Публікація без сервера.
+
+   localStorage живе лише в одному браузері — а на iOS застосунок з
+   домашнього екрана має ще й окреме сховище, тож чернетка панелі туди не
+   потрапляє в принципі. Щоб зміни побачили всі, overrides.js мусить
+   опинитися в репозиторії.
+
+   Панель уміє записати його туди сама через GitHub API. Замість сервера —
+   дрібнозернистий токен, який адмін вводить один раз на своєму телефоні.
+   Токен лежить лише в localStorage цього пристрою й у репозиторій не
+   потрапляє. Порожній owner вимикає режим — лишається експорт файлу.
+   ------------------------------------------------------------------------- */
+const GITHUB = {
+  owner:  'Envyyy-uk',
+  repo:   'Menu_Bar_and_Food_Guest',
+  branch: 'claude/waiting-photo-task-4p3npi',
+  path:   'assets/overrides.js'
+};
+
 let REMOTE_OVERRIDES = null;         // заповнюється, якщо сервер відповів
 
 /* Дні: 0 = неділя … 6 = субота */
@@ -99,12 +119,16 @@ function effectiveOverrides() {
   const layers = [base, REMOTE_OVERRIDES].filter(Boolean);
   const draft = adminDraft();
   if (draft) layers.push(draft);
-  const out = { updated: '', schedules: {}, rules: {}, local: !!draft };
+  const out = { updated: '', schedules: {}, rules: {}, local: false };
   layers.forEach(l => {
     out.updated = l.updated || out.updated;
     Object.assign(out.schedules, l.schedules || {});
     Object.assign(out.rules, l.rules || {});
   });
+  // «діє чернетка» має означати саме розбіжність: після публікації чернетка
+  // збігається з файлом, і попереджати вже нема про що
+  const same = (a, b) => JSON.stringify(a || {}) === JSON.stringify(b || {});
+  out.local = !!draft && !(same(out.rules, base.rules) && same(out.schedules, base.schedules));
   return out;
 }
 

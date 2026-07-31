@@ -35,6 +35,7 @@ function load() {
 }
 
 function persist() {
+  published = false;                 // будь-яка правка знову розходиться з репозиторієм
   draft.updated = new Date().toISOString().slice(0, 16);
   try { localStorage.setItem('sw-overrides', JSON.stringify(draft)); } catch (e) { /* ignore */ }
   render();
@@ -224,6 +225,14 @@ function render() {
 
   document.querySelectorAll('.atab').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
 
+  // Головна пастка панелі: перемикач стоїть на Off, а гості бачать старе,
+  // бо зміни ще не доїхали до репозиторію. Кажемо про це прямо.
+  const flag = document.getElementById('unpub');
+  if (flag) {
+    flag.style.display = isUnpublished() ? '' : 'none';
+    flag.textContent = t(ghReady() ? 'adm.unpublished' : 'adm.unpublished.manual', LANG);
+  }
+
   const mount = document.getElementById('panel');
   mount.innerHTML = '';
 
@@ -259,13 +268,81 @@ const OVERRIDES = ${JSON.stringify(clean, null, 2)};
 `;
 }
 
+/* --------------------------------------------------- публікація ------- */
+
+/** Чи відрізняється чернетка від того, що вже лежить у репозиторії */
+let published = false;               // опубліковано в цьому сеансі
+
+function isUnpublished() {
+  if (published) return false;
+  const same = (a, b) => JSON.stringify(a || {}) === JSON.stringify(b || {});
+  return !(same(draft.rules, OVERRIDES.rules) && same(draft.schedules, OVERRIDES.schedules));
+}
+
+const ghToken = () => {
+  try { return localStorage.getItem('sw-gh-token') || ''; } catch (e) { return ''; }
+};
+const ghReady = () => !!(GITHUB && GITHUB.owner && ghToken());
+
+/** btoa працює з байтами, тому спершу переганяємо UTF-8 у latin1 */
+function b64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  bytes.forEach(b => (bin += String.fromCharCode(b)));
+  return btoa(bin);
+}
+
+const ghUrl = () =>
+  `https://api.github.com/repos/${GITHUB.owner}/${GITHUB.repo}/contents/${GITHUB.path}`;
+
+const ghHeaders = () => ({
+  Authorization: 'Bearer ' + ghToken(),
+  Accept: 'application/vnd.github+json',
+  'X-GitHub-Api-Version': '2022-11-28'
+});
+
+/** Записати overrides.js у репозиторій. Повертає текст помилки або ''. */
+async function publishToGitHub() {
+  // sha поточного файлу обовʼязковий, інакше GitHub вважає це створенням нового
+  const head = await fetch(`${ghUrl()}?ref=${encodeURIComponent(GITHUB.branch)}`,
+    { headers: ghHeaders(), cache: 'no-store' });
+  if (!head.ok) return `HTTP ${head.status}`;
+  const sha = (await head.json()).sha;
+
+  const put = await fetch(ghUrl(), {
+    method: 'PUT',
+    headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()),
+    body: JSON.stringify({
+      message: `Update menu availability (${draft.updated})`,
+      content: b64(buildFile()),
+      sha,
+      branch: GITHUB.branch
+    })
+  });
+  if (!put.ok) {
+    let detail = '';
+    try { detail = (await put.json()).message || ''; } catch (e) { /* ignore */ }
+    return `HTTP ${put.status}${detail ? ' · ' + detail : ''}`;
+  }
+  return '';
+}
+
 /* ---------------------------------------------------- мова панелі ------ */
 function applyAdminI18n() {
   document.documentElement.lang = LANG;
   document.querySelectorAll('[data-i18n]').forEach(n => (n.innerHTML = t(n.dataset.i18n, LANG)));
   document.querySelectorAll('[data-i18n-ph]').forEach(n => (n.placeholder = t(n.dataset.i18nPh, LANG)));
   const exportBtn = document.getElementById('export');
-  if (exportBtn) exportBtn.textContent = t(API_BASE ? 'adm.publish' : 'adm.export', LANG);
+  if (exportBtn) {
+    exportBtn.textContent = API_BASE ? t('adm.publish', LANG)
+      : ghReady() ? t('adm.gh.publish', LANG)
+      : t('adm.export', LANG);
+  }
+  const tokenBtn = document.getElementById('ghtoken');
+  if (tokenBtn) {
+    tokenBtn.style.display = (!API_BASE && GITHUB && GITHUB.owner) ? '' : 'none';
+    tokenBtn.textContent = t(ghReady() ? 'adm.gh.tokenSet' : 'adm.gh.token', LANG);
+  }
   // localStorage привʼязаний до походження; на телефоні панель і меню легко
   // опинитись за різними адресами — тоді чернетка «не працює» без жодної помилки
   const origin = document.getElementById('aorigin');
@@ -311,6 +388,24 @@ function initAdmin() {
   const exportBtn = document.getElementById('export');
 
   exportBtn.addEventListener('click', async () => {
+    // GitHub — те саме «опублікувати», лише без власного сервера
+    if (!API_BASE && ghReady()) {
+      exportBtn.disabled = true;
+      exportBtn.textContent = t('adm.gh.publishing', LANG);
+      const err = await publishToGitHub();
+      if (!err) {
+        // OVERRIDES у памʼяті лишився старим до перезавантаження, тож про
+        // збіг із репозиторієм пам'ятаємо окремо
+        published = true;
+        exportBtn.textContent = t('adm.gh.published', LANG);
+        render();                    // попередження про неопубліковане знімаємо одразу
+      } else {
+        exportBtn.textContent = t('adm.gh.failed', LANG) + ' ' + err;
+      }
+      exportBtn.disabled = false;
+      setTimeout(() => { applyAdminI18n(); render(); }, err ? 6000 : 3000);
+      return;
+    }
     // З бекендом — публікуємо одразу. Без нього — віддаємо файл на заміну.
     if (API_BASE) {
       exportBtn.disabled = true;
@@ -351,6 +446,19 @@ function initAdmin() {
       btn.textContent = t('adm.selected', LANG);
     }
     setTimeout(() => (btn.textContent = t('adm.copy', LANG)), 2500);
+  });
+
+  document.getElementById('ghtoken').addEventListener('click', () => {
+    const now = ghToken();
+    // порожній рядок стирає токен — вихід із чужого телефона має бути простим
+    const next = prompt(t('adm.gh.tokenPrompt', LANG), now);
+    if (next === null) return;
+    try {
+      if (next.trim()) localStorage.setItem('sw-gh-token', next.trim());
+      else localStorage.removeItem('sw-gh-token');
+    } catch (e) { /* приватний режим */ }
+    applyAdminI18n();
+    render();
   });
 
   document.getElementById('reset').addEventListener('click', () => {
