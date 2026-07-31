@@ -119,16 +119,21 @@ function effectiveOverrides() {
   const layers = [base, REMOTE_OVERRIDES].filter(Boolean);
   const draft = adminDraft();
   if (draft) layers.push(draft);
-  const out = { updated: '', schedules: {}, rules: {}, local: false };
-  layers.forEach(l => {
-    out.updated = l.updated || out.updated;
-    Object.assign(out.schedules, l.schedules || {});
-    Object.assign(out.rules, l.rules || {});
-  });
+  const merge = list => {
+    const acc = { updated: '', schedules: {}, rules: {} };
+    list.forEach(l => {
+      acc.updated = l.updated || acc.updated;
+      Object.assign(acc.schedules, l.schedules || {});
+      Object.assign(acc.rules, l.rules || {});
+    });
+    return acc;
+  };
+  const pub = merge(layers.filter(l => l !== draft));
+  const out = merge(layers);
   // «діє чернетка» має означати саме розбіжність: після публікації чернетка
-  // збігається з файлом, і попереджати вже нема про що
+  // збігається з опублікованим станом, і попереджати вже нема про що
   const same = (a, b) => JSON.stringify(a || {}) === JSON.stringify(b || {});
-  out.local = !!draft && !(same(out.rules, base.rules) && same(out.schedules, base.schedules));
+  out.local = !!draft && !(same(out.rules, pub.rules) && same(out.schedules, pub.schedules));
   return out;
 }
 
@@ -146,6 +151,40 @@ async function fetchOverrides() {
     return false;                    // сервер лежить — лишаємось на статиці
   }
 }
+
+/* -------------------------------------------------------------------------
+   Свіжий стан без сервера.
+
+   overrides.js підключений звичайним <script src>, тож його кешує браузер —
+   а застосунок з домашнього екрана тримає таку копію особливо довго, бо
+   кнопки «оновити» в нього немає. Через це щойно опубліковані зміни на
+   сайті вже видно, а в PWA ще ні.
+
+   Тому той самий файл перечитуємо запитом із міткою часу: інша адреса —
+   кеш обходиться. Вміст після `const OVERRIDES =` — звичайний JSON, тож
+   розбираємо його JSON.parse, без eval.
+   ------------------------------------------------------------------------- */
+async function refreshOverrides() {
+  if (location.protocol === 'file:') return false;   // локальний файл — нема що оновлювати
+  try {
+    const r = await fetch('assets/overrides.js?ts=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) return false;
+    const txt = await r.text();
+    const at = txt.indexOf('const OVERRIDES');
+    const s = txt.indexOf('{', at), e = txt.lastIndexOf('}');
+    if (at < 0 || s < 0 || e <= s) return false;
+    const data = JSON.parse(txt.slice(s, e + 1));
+    if (!data || typeof data !== 'object') return false;
+    const changed = JSON.stringify(data) !== JSON.stringify(REMOTE_OVERRIDES);
+    REMOTE_OVERRIDES = data;
+    return changed;
+  } catch (err) {
+    return false;                    // офлайн — лишаємось на тому, що вже завантажено
+  }
+}
+
+/** Те, що зараз опубліковано: свіже з мережі, інакше вбудоване у сторінку */
+const publishedState = () => REMOTE_OVERRIDES || OVERRIDES;
 
 /** Усі розклади: вбудовані + додані панеллю */
 function allSchedules() {

@@ -700,10 +700,14 @@ function initPage(config) {
   // сторінка сама перемикається на межі години — перезавантажувати не треба
   setInterval(applySchedule, 30000);
 
-  // якщо колись зʼявиться бекенд — стан почне приходити звідти й оновлюватись
-  // без перезавантаження; поки API_BASE порожній, це нічого не робить
-  if (API_BASE) {
-    fetchOverrides().then(ok => { if (ok) applySchedule(); });
-    setInterval(() => fetchOverrides().then(ok => { if (ok) applySchedule(); }), API_POLL_MS);
-  }
+  // Свіжий стан: із сервера, якщо він є, інакше — перечитуванням overrides.js
+  // повз кеш. Друге особливо важливе для застосунку з домашнього екрана.
+  const pull = API_BASE ? fetchOverrides : refreshOverrides;
+  const sync = () => pull().then(ok => { if (ok) applySchedule(); });
+  sync();
+  setInterval(sync, API_POLL_MS);
+  // повернення застосунку на передній план — найважливіший момент перевірити
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) sync();
+  });
 }

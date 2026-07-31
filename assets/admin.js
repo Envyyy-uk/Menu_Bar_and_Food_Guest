@@ -22,15 +22,19 @@ let draft = { updated: '', schedules: {}, rules: {} };
 let filter = '';
 let tab = 'items';
 
+let fromDraft = false;               // чернетка з localStorage, а не з файлу
+
 function load() {
   try {
     const raw = localStorage.getItem('sw-overrides');
-    if (raw) { draft = JSON.parse(raw); return; }
+    if (raw) { draft = JSON.parse(raw); fromDraft = true; return; }
   } catch (e) { /* приватний режим */ }
+  const pub = publishedState();
+  fromDraft = false;
   draft = {
-    updated: OVERRIDES.updated || '',
-    schedules: JSON.parse(JSON.stringify(OVERRIDES.schedules || {})),
-    rules: JSON.parse(JSON.stringify(OVERRIDES.rules || {}))
+    updated: pub.updated || '',
+    schedules: JSON.parse(JSON.stringify(pub.schedules || {})),
+    rules: JSON.parse(JSON.stringify(pub.rules || {}))
   };
 }
 
@@ -275,8 +279,9 @@ let published = false;               // опубліковано в цьому �
 
 function isUnpublished() {
   if (published) return false;
+  const pub = publishedState();
   const same = (a, b) => JSON.stringify(a || {}) === JSON.stringify(b || {});
-  return !(same(draft.rules, OVERRIDES.rules) && same(draft.schedules, OVERRIDES.schedules));
+  return !(same(draft.rules, pub.rules) && same(draft.schedules, pub.schedules));
 }
 
 const ghToken = () => {
@@ -377,7 +382,12 @@ function initAdmin() {
   load();
   buildAdminLangSwitch();
   applyAdminI18n();
-  if (API_BASE) fetchOverrides().then(ok => { if (ok) render(); });
+  // панель теж могла завантажитись із кешу — звіряємось із опублікованим
+  (API_BASE ? fetchOverrides() : refreshOverrides()).then(ok => {
+    if (!ok) return;
+    if (!fromDraft) load();          // своєї чернетки немає — беремо свіжий стан
+    render();
+  });
 
   document.querySelectorAll('.atab').forEach(b =>
     b.addEventListener('click', () => { tab = b.dataset.tab; render(); }));
