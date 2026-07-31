@@ -418,6 +418,20 @@ table.matrix td sup { font-size: 8.5px; color: var(--accent); font-weight: 700; 
 .scheduled-off > .ing-label, .scheduled-off > .alg-label, .scheduled-off > .srcbadge,
 .scheduled-off > .grid, .scheduled-off > .courses, .scheduled-off > .price,
 .scheduled-off > .hours, .scheduled-off > .winelist { opacity: .45; }
+
+/* посилання на закриту сторінку — і в шапці, і карткою на головній */
+.nav a.link-off { opacity: .5; text-decoration: line-through; }
+a.card.link-off { opacity: .62; }
+a.card.link-off .kicker, a.card.link-off h2 { text-decoration: line-through; }
+.offbadge {
+  display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 999px;
+  background: var(--warn-bg); border: 1px solid var(--gold-soft);
+  font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+  text-decoration: none; color: var(--ink-soft); vertical-align: middle;
+}
+a.card { position: relative; }
+a.card .offbadge { position: absolute; top: 12px; right: 12px; margin: 0; }
+
 .sched-note {
   margin: 0 0 12px; padding: 8px 12px; border-radius: 6px;
   background: var(--warn-bg); border-left: 3px solid var(--gold);

@@ -815,6 +815,18 @@ const I18N = {
     uk: 'Наразі немає', en: 'Currently unavailable', es: 'No disponible ahora',
     it: 'Al momento non disponibile', de: 'Zurzeit nicht verfügbar', ru: 'Сейчас нет в наличии'
   },
+  'adm.origin': {
+    uk: 'Чернетка діє лише за цією адресою. Меню треба відкривати з неї ж — інакше змін не буде видно:',
+    en: 'The draft only applies at this address. Open the menu from the same one, or the changes will not show:',
+    es: 'El borrador solo se aplica en esta dirección. Abre la carta desde la misma o los cambios no se verán:',
+    it: 'La bozza vale solo a questo indirizzo. Apri il menu dallo stesso, altrimenti le modifiche non si vedono:',
+    de: 'Der Entwurf gilt nur unter dieser Adresse. Öffnen Sie die Karte über dieselbe, sonst sind die Änderungen unsichtbar:',
+    ru: 'Черновик действует только по этому адресу. Меню нужно открывать с него же — иначе изменений не будет видно:'
+  },
+  'sched.badge': {
+    uk: 'Зачинено', en: 'Closed', es: 'Cerrado',
+    it: 'Chiuso', de: 'Geschlossen', ru: 'Закрыто'
+  },
   'sched.draft': {
     uk: 'Діє незбережена чернетка адмін-панелі — гості її не бачать',
     en: 'An unsaved admin draft is active — guests do not see it',

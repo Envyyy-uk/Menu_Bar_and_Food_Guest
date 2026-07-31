@@ -266,6 +266,10 @@ function applyAdminI18n() {
   document.querySelectorAll('[data-i18n-ph]').forEach(n => (n.placeholder = t(n.dataset.i18nPh, LANG)));
   const exportBtn = document.getElementById('export');
   if (exportBtn) exportBtn.textContent = t(API_BASE ? 'adm.publish' : 'adm.export', LANG);
+  // localStorage привʼязаний до походження; на телефоні панель і меню легко
+  // опинитись за різними адресами — тоді чернетка «не працює» без жодної помилки
+  const origin = document.getElementById('aorigin');
+  if (origin) origin.textContent = location.origin + location.pathname.replace(/[^/]*$/, '');
   document.querySelectorAll('.langbtn').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG));
 }
 

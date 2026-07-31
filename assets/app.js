@@ -607,10 +607,22 @@ function applySchedule() {
       : `${esc(t('sched.pageClosed', LANG))} ${esc(t('sched.servedAt', LANG))} ` +
         `${esc(describeSchedule(pageStatus.rule.schedule, LANG))}`;
     if (host) host.after(el('div', 'notice page-sched', `<b>${esc(t('sched.closed', LANG))}.</b> ${body}`));
-    if (pageStatus.rule.mode === 'hide') {
-      document.querySelectorAll('main .section, main .setmenu').forEach(n => (n.style.display = 'none'));
-    }
+    // 'hide' — ховаємо вміст; 'dim' — лишаємо читабельним, але явно приглушеним,
+    // інакше закрита сторінка виглядає точно так само, як відкрита
+    document.querySelectorAll('main .section, main .setmenu').forEach(n => {
+      if (pageStatus.rule.mode === 'hide') n.style.display = 'none';
+      else n.classList.add('scheduled-off');
+    });
   }
+
+  // посилання на закриті сторінки — у шапці й на картках головної
+  document.querySelectorAll('.nav a[href$=".html"], a.card[href$=".html"]').forEach(a => {
+    const id = a.getAttribute('href').replace(/^.*\//, '').replace(/\.html$/, '');
+    const st = statusOf('page', id, now);
+    a.classList.toggle('link-off', !st.open);
+    a.querySelectorAll(':scope > .offbadge').forEach(n => n.remove());
+    if (!st.open) a.appendChild(el('span', 'offbadge', esc(t('sched.badge', LANG))));
+  });
 
   // сповіщення, що діє незбережена чернетка панелі
   document.querySelectorAll('.draft-banner').forEach(n => n.remove());
