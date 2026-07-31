@@ -656,6 +656,7 @@ const I18N = {
   'adm.state.auto': { uk: 'За розкладом', en: 'On schedule', es: 'Según horario', it: 'Su orario', de: 'Nach Zeitplan', ru: 'По расписанию' },
   'adm.state.on':   { uk: 'Завжди', en: 'Always', es: 'Siempre', it: 'Sempre', de: 'Immer', ru: 'Всегда' },
   'adm.state.off':  { uk: 'Немає', en: 'Off', es: 'Agotado', it: 'Esaurito', de: 'Aus', ru: 'Нет' },
+  'adm.state.soon': { uk: 'Скоро', en: 'Soon', es: 'Pronto', it: 'Presto', de: 'Bald', ru: 'Скоро' },
 
   'adm.mode.dim':   { uk: 'Приглушити', en: 'Dim', es: 'Atenuar', it: 'Attenua', de: 'Abblenden', ru: 'Приглушить' },
   'adm.mode.hide':  { uk: 'Ховати', en: 'Hide', es: 'Ocultar', it: 'Nascondi', de: 'Ausblenden', ru: 'Скрывать' },
@@ -670,6 +671,7 @@ const I18N = {
   },
   'adm.status.open':     { uk: 'доступно', en: 'available', es: 'disponible', it: 'disponibile', de: 'verfügbar', ru: 'доступно' },
   'adm.status.off':      { uk: 'немає', en: 'off', es: 'agotado', it: 'esaurito', de: 'aus', ru: 'нет' },
+  'adm.status.soon':     { uk: 'скоро', en: 'soon', es: 'pronto', it: 'presto', de: 'bald', ru: 'скоро' },
   'adm.status.offhours': { uk: 'поза годинами', en: 'outside hours', es: 'fuera de horario', it: 'fuori orario', de: 'außerhalb der Zeiten', ru: 'вне часов' },
 
   'adm.countOf':   { uk: 'із', en: 'of', es: 'de', it: 'di', de: 'von', ru: 'из' },
@@ -881,6 +883,22 @@ const I18N = {
   'sched.badge': {
     uk: 'Зачинено', en: 'Closed', es: 'Cerrado',
     it: 'Chiuso', de: 'Geschlossen', ru: 'Закрыто'
+  },
+  'sched.badge.soon': {
+    uk: 'Скоро', en: 'Soon', es: 'Pronto',
+    it: 'Presto', de: 'Bald', ru: 'Скоро'
+  },
+  'sched.soonHead': {
+    uk: 'Скоро', en: 'Coming soon', es: 'Muy pronto',
+    it: 'Presto disponibile', de: 'Demnächst', ru: 'Скоро'
+  },
+  'sched.soon': {
+    uk: 'Готуємо — незабаром зʼявиться в меню.',
+    en: 'We are preparing it — it will be on the menu shortly.',
+    es: 'Lo estamos preparando: estará en la carta muy pronto.',
+    it: 'Lo stiamo preparando: sarà presto nel menu.',
+    de: 'Wir bereiten es vor — in Kürze auf der Karte.',
+    ru: 'Готовим — скоро появится в меню.'
   },
   'sched.draft': {
     uk: 'Діє незбережена чернетка адмін-панелі — гості її не бачать',

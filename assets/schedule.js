@@ -243,7 +243,10 @@ function describeSchedule(scheduleKey, lang) {
 function statusOf(scope, id, now) {
   const rule = ruleFor(scope, id);
   if (!rule) return { open: true, rule: null };
-  if (rule.state === 'off') return { open: false, closedManually: true, rule };
+  // 'soon' — те саме закриття, але з іншою обіцянкою: не «немає», а «буде»
+  if (rule.state === 'off' || rule.state === 'soon') {
+    return { open: false, closedManually: true, soon: rule.state === 'soon', rule };
+  }
   if (rule.state === 'on') return { open: true, rule };
   if (!rule.schedule) return { open: true, rule };
   return { open: isServingNow(rule.schedule, now), rule };

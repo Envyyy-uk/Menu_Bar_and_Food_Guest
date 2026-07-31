@@ -92,6 +92,7 @@ function itemRow(item) {
   const now = restaurantNow();
   const st = (function () {
     if (rule.state === 'off') return { open: false, manual: true };
+    if (rule.state === 'soon') return { open: false, manual: true, soon: true };
     if (rule.state === 'on' || !rule.schedule) return { open: true };
     return { open: isServingNow(rule.schedule, now) };
   })();
@@ -101,7 +102,7 @@ function itemRow(item) {
     `${aesc(item.name)}<small>${aesc(item.sub || '')}${item.group ? ' · ' + aesc(item.group) : ''}</small>`));
 
   const states = ael('div', 'astates');
-  ['auto', 'on', 'off'].forEach(val => {
+  ['auto', 'on', 'off', 'soon'].forEach(val => {
     const b = ael('button', 'sbtn s-' + val + (rule.state === val ? ' on' : ''),
       aesc(t('adm.state.' + val, LANG)));
     b.type = 'button';
@@ -131,9 +132,12 @@ function itemRow(item) {
     setRule(item.scope, item.id, { mode: rule.mode === 'hide' ? 'dim' : 'hide' }));
   row.appendChild(mode);
 
+  const statusKey = st.open ? 'adm.status.open'
+    : st.soon ? 'adm.status.soon'
+    : st.manual ? 'adm.status.off' : 'adm.status.offhours';
   row.appendChild(ael('div', 'astatus', st.open
-    ? `<span class="ok">${aesc(t('adm.status.open', LANG))}</span>`
-    : `<span class="no">${aesc(t(st.manual ? 'adm.status.off' : 'adm.status.offhours', LANG))}</span>`));
+    ? `<span class="ok">${aesc(t(statusKey, LANG))}</span>`
+    : `<span class="no${st.soon ? ' soon' : ''}">${aesc(t(statusKey, LANG))}</span>`));
   return row;
 }
 
@@ -250,7 +254,8 @@ function render() {
   const rows = source.filter(x => !q ||
     (x.name + ' ' + (x.sub || '') + ' ' + (x.group || '')).toLowerCase().includes(q));
 
-  const closedCount = source.filter(x => currentRule(x.scope, x.id).state === 'off').length;
+  const closedCount = source.filter(x =>
+    ['off', 'soon'].includes(currentRule(x.scope, x.id).state)).length;
   mount.appendChild(ael('p', 'acount',
     `${rows.length} ${aesc(t('adm.countOf', LANG))} ${source.length}` +
     (closedCount ? ` · ${aesc(t('adm.closedManually', LANG))}: ${closedCount}` : '')));

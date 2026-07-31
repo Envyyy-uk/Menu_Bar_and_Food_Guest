@@ -594,7 +594,7 @@ function applySchedule() {
     node.style.display = (!st.open && st.rule && st.rule.mode === 'hide') ? 'none' : '';
     if (st.open || (st.rule && st.rule.mode === 'hide')) return;
     const text = st.closedManually
-      ? `<b>${esc(t('sched.soldOut', LANG))}</b>`
+      ? `<b>${esc(t(st.soon ? 'sched.soon' : 'sched.soldOut', LANG))}</b>`
       : `<b>${esc(t('sched.closed', LANG))}.</b> ${esc(t('sched.servedAt', LANG))} ` +
         `${esc(describeSchedule(st.rule.schedule, LANG))}`;
     node.prepend(el('p', 'sched-note', text));
@@ -614,10 +614,11 @@ function applySchedule() {
   if (!pageStatus.open && pageStatus.rule) {
     const host = document.querySelector('main .notice');
     const body = pageStatus.closedManually
-      ? esc(t('sched.soldOut', LANG))
+      ? esc(t(pageStatus.soon ? 'sched.soon' : 'sched.soldOut', LANG))
       : `${esc(t('sched.pageClosed', LANG))} ${esc(t('sched.servedAt', LANG))} ` +
         `${esc(describeSchedule(pageStatus.rule.schedule, LANG))}`;
-    if (host) host.after(el('div', 'notice page-sched', `<b>${esc(t('sched.closed', LANG))}.</b> ${body}`));
+    const head = t(pageStatus.soon ? 'sched.soonHead' : 'sched.closed', LANG);
+    if (host) host.after(el('div', 'notice page-sched', `<b>${esc(head)}.</b> ${body}`));
     // 'hide' — ховаємо вміст; 'dim' — лишаємо читабельним, але явно приглушеним,
     // інакше закрита сторінка виглядає точно так само, як відкрита
     document.querySelectorAll('main .section, main .setmenu').forEach(n => {
@@ -630,9 +631,14 @@ function applySchedule() {
   document.querySelectorAll('.nav a[href$=".html"], a.card[href$=".html"]').forEach(a => {
     const id = a.getAttribute('href').replace(/^.*\//, '').replace(/\.html$/, '');
     const st = statusOf('page', id, now);
-    a.classList.toggle('link-off', !st.open);
+    // «скоро» не закреслюємо: закреслене читається як «більше не буде»
+    a.classList.toggle('link-off', !st.open && !st.soon);
+    a.classList.toggle('link-soon', !st.open && !!st.soon);
     a.querySelectorAll(':scope > .offbadge').forEach(n => n.remove());
-    if (!st.open) a.appendChild(el('span', 'offbadge', esc(t('sched.badge', LANG))));
+    if (!st.open) {
+      a.appendChild(el('span', 'offbadge' + (st.soon ? ' soon' : ''),
+        esc(t(st.soon ? 'sched.badge.soon' : 'sched.badge', LANG))));
+    }
   });
 
   // сповіщення, що діє незбережена чернетка панелі

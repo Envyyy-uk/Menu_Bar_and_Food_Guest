@@ -449,11 +449,18 @@ table.matrix td sup { font-size: 8.5px; color: var(--accent); font-weight: 700; 
 .nav a.link-off { opacity: .5; text-decoration: line-through; }
 a.card.link-off { opacity: .62; }
 a.card.link-off .kicker, a.card.link-off h2 { text-decoration: line-through; }
+/* «скоро» лише притишуємо: закреслене читалось би як «більше не буде» */
+.nav a.link-soon { opacity: .68; }
+a.card.link-soon { opacity: .8; }
 .offbadge {
   display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 999px;
   background: var(--warn-bg); border: 1px solid var(--gold-soft);
   font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
   text-decoration: none; color: var(--ink-soft); vertical-align: middle;
+}
+.offbadge.soon {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: var(--accent); color: var(--accent);
 }
 a.card { position: relative; }
 a.card .offbadge { position: absolute; top: 12px; right: 12px; margin: 0; }
@@ -523,6 +530,8 @@ a.card .offbadge { position: absolute; top: 12px; right: 12px; margin: 0; }
 .sbtn:hover { border-color: var(--accent); }
 .sbtn.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
 .sbtn.s-off.on { background: var(--danger); border-color: var(--danger); color: #fff; }
+.sbtn.s-soon.on { background: var(--gold); border-color: var(--gold); color: #241d0d; }
+.astatus .no.soon { color: var(--gold); }
 .asel, .sname, .stime {
   font: inherit; font-size: 13px; padding: 6px 9px; border-radius: 8px;
   border: 1px solid var(--rule); background: var(--paper); color: var(--ink);
@@ -567,7 +576,8 @@ a.card .offbadge { position: absolute; top: 12px; right: 12px; margin: 0; }
   .abar { padding-top: 10px; }
   .atab { padding: 9px 14px; }
   .astates { width: 100%; }
-  .sbtn { flex: 1; padding: 12px 6px; font-size: 13.5px; }
+  /* чотири стани в один рядок — «За розкладом» мусить мати право перенестись */
+  .sbtn { flex: 1; padding: 11px 4px; font-size: 12.5px; white-space: normal; line-height: 1.2; }
   .asel, .mbtn { width: 100%; padding: 11px 12px; }
   .mbtn { text-align: center; }
   .dbtn { width: 40px; padding: 11px 0; font-size: 13px; }
